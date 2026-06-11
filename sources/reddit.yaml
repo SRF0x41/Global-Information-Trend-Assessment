@@ -1,0 +1,9 @@
+client_id: "your-reddit-client-id"
+client_secret: "your-reddit-client-secret"
+user_agent: "gita-local-agent/0.1.0"
+subreddits:
+  - "technology"
+  - "worldnews"
+  - "politics"
+max_posts: 50
+exclude_selfposts: true

@@ -1,0 +1,13 @@
+default_scraper:
+  headers:
+    User-Agent: "GITA Local Scraper/0.1.0"
+  timeout: 30
+  follow_redirects: true
+  allowed_domains:
+    - example.com
+    - medium.com
+    - arstechnica.com
+rss_feeds:
+  - https://example.com/rss
+  - https://medium.com/feed
+  - https://feeds.arstechnica.com/arstechnica/index.xml

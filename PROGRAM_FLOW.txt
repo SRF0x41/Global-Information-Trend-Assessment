@@ -1,63 +1,3 @@
-# Global Information Trend Assessment (GITA)
-
-## Overview
-A local-first intelligence and cultural analysis system that:
-- Analyzes public internet sources
-- Tracks cultural and technological shifts
-- Generates original observations
-- Produces recurring zeitgeist reports
-
-## Architecture
-- **Python** for core logic
-- **SQLite** for structured data storage
-- **FAISS** for semantic memory
-- **Requests/BeautifulSoup** for web scraping
-- **PRAW** for Reddit integration
-- **Feedparser** for RSS feeds
-
-## Getting Started
-1. Create a virtual environment:
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-3. Initialize the database:
-```bash
-git init
-python setup.py
-```
-4. Run tests:
-```bash
-python -m pytest tests/
-```
-
-## Directory Structure
-```
-gita/
-├── data/            # Persistent storage (SQLite, FAISS)
-├── analysis/        # Core processing modules
-│   ├── document_collector.py
-│   ├── trend_analyzer.py
-│   ├── memory_store.py
-│   └── report_generator.py
-├── tests/           # Unit and integration tests
-├── requirements.txt # Python dependencies
-└── README.md        # This file
-```
-
-## Development Notes
-- Focus on simplicity and maintainability
-- Avoid complex frameworks and distributed systems
-- Use deterministic processing whenever possible
-- Keep files small and focused
-- Prefer incremental development over premature optimization
-
-## Program Flow Documentation
-
 Global Information Trend Assessment (GITA) Program Flow
 ==================================================
 
@@ -114,3 +54,16 @@ Global Information Trend Assessment (GITA) Program Flow
      * python3 -m venv venv
      * source venv/bin/activate
      * pip install -r requirements.txt
+
+7. File Structure Overview
+--------------------------
+   gita/
+   ├── data/            # Persistent storage (SQLite, FAISS)
+   ├── analysis/        # Core processing modules
+   │   ├── document_collector.py
+   │   ├── trend_analyzer.py
+   │   ├── memory_store.py
+   │   └── report_generator.py
+   ├── tests/           # Unit and integration tests
+   ├── requirements.txt # Python dependencies
+   └── README.md        # Project documentation
