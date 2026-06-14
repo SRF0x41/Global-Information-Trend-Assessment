@@ -1,34 +1,78 @@
 import yaml
-from praw.models import Submission
-from bs4 import BeautifulSoup
 import requests
+import feedparser
+import time
+from pathlib import Path
+
 
 class DocumentCollector:
-    def __init__(self):
-        self.config = self._load_config()
 
-    def _load_config(self):
-        with open("../sources/reddit.yaml") as f:
-            return yaml.safe_load(f)
-
-    def collect_reddit_posts(self):
-        import praw
-
-        reddit = praw.Reddit(
-            client_id=self.config["client_id"],
-            client_secret=self.config["client_secret"],
-            user_agent=self.config["user_agent"]
+    def _load_feeds(self):
+        config_path = (
+            Path(__file__).parent.parent
+            / "sources"
+            / "feeds.yaml"
         )
 
-        for subreddit in self.config["subreddits"]:
-            for submission in reddit.subreddit(subreddit).new(limit=self.config["max_posts"]):
-                if not submission.is_self:
-                    yield {
-                        "source": f"r/{subreddit}",
-                        "content": submission.title + "\n\n" + submission.selftext,
-                        "metadata": {
-                            "url": submission.url,
-                            "score": submission.score,
-                            "created_utc": submission.created_utc
-                        }
-                    }
+        with open(config_path, "r") as f:
+            return yaml.safe_load(f)
+
+    def scrape_all_rss_feeds(self):
+        feeds = self._load_feeds()
+
+        for category, feed_list in feeds.items():
+            for feed in feed_list:
+                yield from self.scrape_rss_feed(feed["url"])
+
+    def scrape_rss_feed(self, url):
+        try:
+            response = requests.get(
+                url,
+                timeout=10,
+                headers={
+                    "User-Agent": "DocumentCollector/1.0"
+                }
+            )
+
+            response.raise_for_status()
+
+            feed = feedparser.parse(response.content)
+
+            if feed.bozo:
+                print(
+                    f"Warning parsing {url}: "
+                    f"{feed.bozo_exception}"
+                )
+
+            if not feed.entries:
+                print(f"No entries found in {url}")
+                return
+
+            for entry in feed.entries:
+
+                title = getattr(entry, "title", "")
+                description = getattr(
+                    entry,
+                    "description",
+                    ""
+                )
+
+                yield {
+                    "source": url,
+                    "content": f"{title}\n\n{description}",
+                    "metadata": {
+                        "url": getattr(entry, "link", ""),
+                        "score": getattr(entry, "score", 0),
+                        "created_utc": getattr(
+                            entry,
+                            "published_parsed",
+                            time.gmtime(),
+                        ),
+                    },
+                }
+
+        except Exception as e:
+            print(
+                f"Error scraping RSS feed "
+                f"{url}: {e}"
+            )

@@ -1,20 +1,18 @@
 from analysis.document_collector import DocumentCollector
-import sqlite3
+import time
 
 def main():
     collector = DocumentCollector()
 
-    # Collect and store documents
-    conn = sqlite3.connect("data/documents.db")
-    cursor = conn.cursor()
+    print(f"Starting RSS feed scraping at {time.ctime()}")
 
-    for doc in collector.collect_reddit_posts():
-        cursor.execute(
-            "INSERT INTO documents (source, content, metadata) VALUES (?, ?, ?)",
-            (doc["source"], doc["content"], str(doc["metadata"])))
+    for item in collector.scrape_all_rss_feeds():
+        # Basic example - just print the title and URL
+        print(f"\nTitle: {item['content'].split('\n')[0]}")
+        print(f"URL: {item['metadata']['url']}")
+        print("-" * 80)
 
-    conn.commit()
-    conn.close()
+    print(f"\nFinished RSS feed scraping at {time.ctime()}")
 
 if __name__ == "__main__":
     main()
