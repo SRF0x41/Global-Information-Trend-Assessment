@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+
 class ReportGenerator:
     def __init__(self):
         pass

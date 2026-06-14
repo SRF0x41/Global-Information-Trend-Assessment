@@ -1,0 +1,1 @@
+{"name": "text_generator", "description": "Generates text based on a given prompt.", "parameters": {"prompt": {"type": "string"}, "max_length": {"type": "integer", "default": 200}}}

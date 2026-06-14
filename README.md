@@ -1,116 +1,78 @@
+```
 # Global Information Trend Assessment (GITA)
 
-## Overview
+## Project Overview
 A local-first intelligence and cultural analysis system that:
-- Analyzes public internet sources
-- Tracks cultural and technological shifts
-- Generates original observations
-- Produces recurring zeitgeist reports
+- Analyzes public internet sources (Reddit, RSS feeds, etc.)
+- Tracks emerging cultural and technological trends
+- Generates original observations and insights
+- Produces recurring zeitgeist reports in markdown format
 
-## Architecture
-- **Python** for core logic
-- **SQLite** for structured data storage
-- **FAISS** for semantic memory
-- **Requests/BeautifulSoup** for web scraping
-- **PRAW** for Reddit integration
-- **Feedparser** for RSS feeds
+## Key Features
+- **Real-time data collection** from multiple sources
+- **Semantic memory system** using FAISS for pattern recognition
+- **SQLite-based storage** for structured document metadata
+- **Modular architecture** with clear separation of concerns
+- **Automated trend detection** and visualization capabilities
+
+## Tech Stack
+- Python 3.10+
+- SQLite (for structured data)
+- FAISS (for semantic similarity search)
+- PRAW (Reddit API integration)
+- Feedparser (RSS feed handling)
+- Requests/BeautifulSoup (web scraping)
 
 ## Getting Started
-1. Create a virtual environment:
 ```bash
+# 1. Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
-```
-2. Install dependencies:
-```bash
+
+# 2. Install dependencies
 pip install -r requirements.txt
-```
-3. Initialize the database:
-```bash
-git init
+
+# 3. Initialize database
 python setup.py
-```
-4. Run tests:
-```bash
-python -m pytest tests/
+
+# 4. Run tests
+test -m pytest tests/
 ```
 
-## Directory Structure
+## Project Structure
 ```
 gita/
 ├── data/            # Persistent storage (SQLite, FAISS)
+│   └── embeddings.index
 ├── analysis/        # Core processing modules
-│   ├── document_collector.py
-│   ├── trend_analyzer.py
-│   ├── memory_store.py
-│   └── report_generator.py
+│   ├── document_collector.py     # Source data collection
+│   ├── trend_analyzer.py         # Pattern recognition
+│   ├── memory_store.py           # Storage system
+│   └── report_generator.py       # Output generation
 ├── tests/           # Unit and integration tests
 ├── requirements.txt # Python dependencies
 └── README.md        # This file
 ```
 
-## Development Notes
-- Focus on simplicity and maintainability
-- Avoid complex frameworks and distributed systems
-- Use deterministic processing whenever possible
-- Keep files small and focused
-- Prefer incremental development over premature optimization
+## System Workflow
+1. **Document Collection**
+   - `analysis/document_collector.py` gathers content from configured sources
+   - Supports Reddit (via PRAW) and RSS feeds (via Feedparser)
 
-## Program Flow Documentation
+2. **Memory Storage**
+   - `analysis/memory_store.py` persists data using SQLite
+   - Creates FAISS index in `data/embeddings.index`
 
-Global Information Trend Assessment (GITA) Program Flow
-==================================================
+3. **Trend Analysis**
+   - `analysis/trend_analyzer.py` identifies patterns using semantic clustering
 
-1. Document Collection Pipeline
----------------------------------
-   - document_collector.py
-   - Responsible for gathering content from various sources
-   - Key methods:
-     * collect(source_type): Main entry point for collecting documents
-     * _collect_reddit(): Example implementation for Reddit data collection
-     * _collect_rss(): Would handle RSS feed parsing
-   - Stores collected documents in MemoryStore
+4. **Report Generation**
+   - `analysis/report_generator.py` produces markdown reports with structured insights
 
-2. Memory Storage System
-------------------------
-   - memory_store.py
-   - Manages persistent storage of documents and metadata
-   - Key methods:
-     * add_source(name, url): Adds a new source to the database
-     * store_document(source_id, content, metadata): Stores document with metadata
-   - Uses SQLite for structured data storage
-   - Creates FAISS index for semantic memory in data/embeddings.index
+## Documentation
+- [CLAUE.md](./CLAUDE.md) contains detailed development instructions for Claude Code users
+- [Program Flow Docs](#program-flow-documentation) explain the system architecture in depth
 
-3. Trend Analysis System
-------------------------
-   - trend_analyzer.py
-   - Analyzes documents to find emerging trends
-   - Key methods:
-     * _load_faiss_index(): Loads FAISS index for semantic search
-     * analyze_trends(documents): Processes documents to identify patterns
-   - Uses FAISS for semantic clustering of document embeddings
-
-4. Report Generation System
---------------------------
-   - report_generator.py
-   - Creates final analysis reports from trend data
-   - Key method:
-     * generate_zeitgeist_report(trends): Produces formatted analysis report
-   - Output format: Markdown with structured sections for each identified trend
-
-5. Execution Flow
-------------------
-   1. Initialize DocumentCollector
-   2. Collect documents from configured sources
-   3. Store documents in MemoryStore
-   4. Use TrendAnalyzer to process collected data
-   5. Generate final report with ReportGenerator
-
-6. Testing and Development
---------------------------
-   - Test files located in tests/ directory
-   - Run tests with: python -m pytest tests/
-   - Virtual environment setup:
-     * python3 -m venv venv
-     * source venv/bin/activate
-     * pip install -r requirements.txt
+## License
+MIT License - See LICENSE file for details
+```

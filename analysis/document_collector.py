@@ -8,11 +8,7 @@ from pathlib import Path
 class DocumentCollector:
 
     def _load_feeds(self):
-        config_path = (
-            Path(__file__).parent.parent
-            / "sources"
-            / "feeds.yaml"
-        )
+        config_path = Path(__file__).parent.parent / "sources" / "feeds.yaml"
 
         with open(config_path, "r") as f:
             return yaml.safe_load(f)
@@ -27,11 +23,7 @@ class DocumentCollector:
     def scrape_rss_feed(self, url):
         try:
             response = requests.get(
-                url,
-                timeout=10,
-                headers={
-                    "User-Agent": "DocumentCollector/1.0"
-                }
+                url, timeout=10, headers={"User-Agent": "DocumentCollector/1.0"}
             )
 
             response.raise_for_status()
@@ -39,10 +31,7 @@ class DocumentCollector:
             feed = feedparser.parse(response.content)
 
             if feed.bozo:
-                print(
-                    f"Warning parsing {url}: "
-                    f"{feed.bozo_exception}"
-                )
+                print(f"Warning parsing {url}: " f"{feed.bozo_exception}")
 
             if not feed.entries:
                 print(f"No entries found in {url}")
@@ -51,11 +40,7 @@ class DocumentCollector:
             for entry in feed.entries:
 
                 title = getattr(entry, "title", "")
-                description = getattr(
-                    entry,
-                    "description",
-                    ""
-                )
+                description = getattr(entry, "description", "")
 
                 yield {
                     "source": url,
@@ -72,7 +57,4 @@ class DocumentCollector:
                 }
 
         except Exception as e:
-            print(
-                f"Error scraping RSS feed "
-                f"{url}: {e}"
-            )
+            print(f"Error scraping RSS feed " f"{url}: {e}")

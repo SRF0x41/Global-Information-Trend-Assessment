@@ -1,0 +1,1 @@
+{"name": "data_fetcher", "description": "Fetches data from a specified URL.", "parameters": {"url": {"type": "string"}}}

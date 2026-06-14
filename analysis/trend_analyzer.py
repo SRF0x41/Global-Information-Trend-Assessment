@@ -2,6 +2,7 @@ import faiss
 import numpy as np
 from typing import List, Dict
 
+
 class TrendAnalyzer:
     def __init__(self, index_path: str = "data/embeddings.index"):
         self.index_path = index_path

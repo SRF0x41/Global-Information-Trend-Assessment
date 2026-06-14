@@ -19,7 +19,7 @@ setup(
         "beautifulsoup4",
         "praw",
         "feedparser",
-        "sqlite3"
+        "sqlite3",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

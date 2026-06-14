@@ -2,6 +2,7 @@ import unittest
 from analysis.trend_analyzer import TrendAnalyzer
 import numpy as np
 
+
 class TestTrendAnalyzer(unittest.TestCase):
     def setUp(self):
         self.analyzer = TrendAnalyzer()

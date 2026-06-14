@@ -1,6 +1,7 @@
 import unittest
 from analysis.memory_store import MemoryStore
 
+
 class TestMemoryStore(unittest.TestCase):
     def setUp(self):
         self.store = MemoryStore()
@@ -15,7 +16,7 @@ class TestMemoryStore(unittest.TestCase):
             source_id=source_id,
             content="Sample document content",
             metadata={"author": "Test User"},
-            embedding=np.random.rand(768).astype(np.float32)
+            embedding=np.random.rand(768).astype(np.float32),
         )
         self.assertGreater(doc_id, 0)
 
@@ -25,7 +26,7 @@ class TestMemoryStore(unittest.TestCase):
             source_id=source_id,
             content="Test document",
             metadata={"author": "Test User"},
-            embedding=np.random.rand(768).astype(np.float32)
+            embedding=np.random.rand(768).astype(np.float32),
         )
 
         cursor = self.store.conn.cursor()

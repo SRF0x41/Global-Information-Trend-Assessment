@@ -2,6 +2,7 @@ import sqlite3
 import numpy as np
 from typing import List, Dict
 
+
 class MemoryStore:
     def __init__(self, db_path: str = "data/documents.db"):
         self.conn = sqlite3.connect(db_path)
@@ -45,12 +46,20 @@ class MemoryStore:
     def add_source(self, name: str, url: str = None, type: str = "web"):
         """Add a new source to the database"""
         cursor = self.conn.cursor()
-        cursor.execute("INSERT OR IGNORE INTO sources (name, url, type) VALUES (?, ?, ?)",
-                      (name, url, type))
+        cursor.execute(
+            "INSERT OR IGNORE INTO sources (name, url, type) VALUES (?, ?, ?)",
+            (name, url, type),
+        )
         self.conn.commit()
         return cursor.lastrowid
 
-    def store_document(self, source_id: int, content: str, metadata: Dict = None, embedding: np.ndarray = None):
+    def store_document(
+        self,
+        source_id: int,
+        content: str,
+        metadata: Dict = None,
+        embedding: np.ndarray = None,
+    ):
         """Store a document with its metadata and optional embedding"""
         cursor = self.conn.cursor()
 
@@ -58,12 +67,17 @@ class MemoryStore:
         metadata_str = str(metadata) if metadata else None
 
         # Convert numpy array to bytes if needed
-        embedding_blob = embedding.tobytes() if isinstance(embedding, np.ndarray) else None
+        embedding_blob = (
+            embedding.tobytes() if isinstance(embedding, np.ndarray) else None
+        )
 
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO documents (source_id, content, metadata, embedding)
             VALUES (?, ?, ?, ?)
-        """, (source_id, content, metadata_str, embedding_blob))
+        """,
+            (source_id, content, metadata_str, embedding_blob),
+        )
 
         self.conn.commit()
         return cursor.lastrowid
