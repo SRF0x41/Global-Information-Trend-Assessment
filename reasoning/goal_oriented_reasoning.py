@@ -35,18 +35,18 @@ class GoalReasoner:
         """Break a goal into steps."""
 
         prompt = f"""
-Break down the following goal into numbered actionable steps.
+            Break down the following goal into numbered actionable steps.
 
-Goal:
-{goal}
+            Goal:
+            {goal}
 
-Return only numbered steps.
+            Return only numbered steps.
 
-Example:
-1. First step
-2. Second step
-3. Third step
-"""
+            Example:
+            1. First step
+            2. Second step
+            3. Third step
+            """
 
         try:
             content = self._get_lmstudio_response(prompt)
@@ -81,12 +81,12 @@ Example:
         """Execute a step using the model."""
 
         prompt = f"""
-Complete the following task:
+            Complete the following task:
 
-{step['goal']}
+            {step['goal']}
 
-Provide a concise answer.
-"""
+            Provide a concise answer.
+            """
 
         try:
             result = self._get_lmstudio_response(prompt)
@@ -153,32 +153,32 @@ Provide a concise answer.
         return True
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-    )
+#     logging.basicConfig(
+#         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+#     )
 
-    # Replace with the exact model ID from:
-    # curl http://127.0.0.1:1234/v1/models
-    MODEL_NAME = "qwen/qwen3-14b"
+#     # Replace with the exact model ID from:
+#     # curl http://127.0.0.1:1234/v1/models
+#     MODEL_NAME = "qwen/qwen3-14b"
 
-    reasoner = GoalReasoner(model_name=MODEL_NAME)
+#     reasoner = GoalReasoner(model_name=MODEL_NAME)
 
-    goal = "Solve the equation 2x + 3 = 7"
+#     goal = "Solve the equation 2x + 3 = 7"
 
-    print("=" * 60)
-    print("Goal Reasoner")
-    print("=" * 60)
-    print(f"Goal: {goal}")
+#     print("=" * 60)
+#     print("Goal Reasoner")
+#     print("=" * 60)
+#     print(f"Goal: {goal}")
 
-    try:
-        success = reasoner.reason_towards_goal(goal)
+#     try:
+#         success = reasoner.reason_towards_goal(goal)
 
-        if success:
-            print("\nGoal successfully achieved.")
-        else:
-            print("\nFailed to achieve goal.")
+#         if success:
+#             print("\nGoal successfully achieved.")
+#         else:
+#             print("\nFailed to achieve goal.")
 
-    except Exception as e:
-        print(f"\nFatal error: {e}")
+#     except Exception as e:
+#         print(f"\nFatal error: {e}")
