@@ -1,78 +1,66 @@
-```
-# Global Information Trend Assessment (GITA)
+# Zeitgeist Intelligence System (ZIS)
 
-## Project Overview
-A local-first intelligence and cultural analysis system that:
-- Analyzes public internet sources (Reddit, RSS feeds, etc.)
-- Tracks emerging cultural and technological trends
-- Generates original observations and insights
-- Produces recurring zeitgeist reports in markdown format
+An autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (cultural, technological, economic, political, social, and psychological).
 
-## Key Features
-- **Real-time data collection** from multiple sources
-- **Semantic memory system** using FAISS for pattern recognition
-- **SQLite-based storage** for structured document metadata
-- **Modular architecture** with clear separation of concerns
-- **Automated trend detection** and visualization capabilities
+## Core Concept: The Living Document
 
-## Tech Stack
-- Python 3.10+
-- SQLite (for structured data)
-- FAISS (for semantic similarity search)
-- PRAW (Reddit API integration)
-- Feedparser (RSS feed handling)
-- Requests/BeautifulSoup (web scraping)
+At the heart of the system is the **Living Document** (`living_document.md`). This is the agent's primary working memory and state. The agent iteratively interacts with this document to:
 
-## Getting Started
-```bash
-# 1. Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
+1.  **Plan** research trajectories based on the current state.
+2.  **Search** for relevant signals via web search tools.
+3.  **Extract** meaningful patterns and signals (not just summaries).
+4.  **Compare** new data against existing models in the document.
+5.  **Refactor** the document to improve coherence and clarity.
+6.  **Assess** when the current understanding is sufficient or if the research loop should break.
 
-# 2. Install dependencies
-pip install -r requirements.txt
+## Agentic Workflow
 
-# 3. Initialize database
-python setup.py
+The system operates through a continuous, iterative loop of specialized tasks:
 
-# 4. Run tests
-test -m pytest tests/
-```
+*   **Planning:** Formulates research strategies and identifies information gaps.
+*   **Search:** Executes targeted searches to gather external signals.
+*   **Extraction:** Processes information to identify "signals"—patterns, themes, or tensions—rather than mere summaries.
+*   **Comparison:** Evaluates new signals to see if they support, weaken, or contradict existing narratives.
+*   **Refactoring:** Continuously refines the living document, evolving from a collection of facts into a coherent model of reality.
+*   **Assessment:** Determines if the current model is robust or requires further investigation.
+
+## Analytical Framework
+
+The system evaluates signals across several key domains to build a multidimensional model:
+- **Cultural:** Changes in values, identity, art, media, and behavior.
+- **Technological:** New technologies, adoption patterns, and societal reactions.
+- **Economic:** Consumer behavior, labor trends, and market sentiment.
+- **Political:** Governance, ideology, and geopolitical shifts.
+- **Social:** Demographics, relationships, and collective behavior.
+- **Psychological:** Fear, optimism, aspirations, and emotional tone.
 
 ## Project Structure
+
 ```
-gita/
-├── data/            # Persistent storage (SQLite, FAISS)
-│   └── embeddings.index
-├── analysis/        # Core processing modules
-│   ├── document_collector.py     # Source data collection
-│   ├── trend_analyzer.py         # Pattern recognition
-│   ├── memory_store.py           # Storage system
-│   └── report_generator.py       # Output generation
-├── tests/           # Unit and integration tests
-├── requirements.txt # Python dependencies
-└── README.md        # This file
+.
+├── main.py             # Entry point for the agentic loop
+├── living_document.md  # The central, evolving state of the system
+├── prompts/            # Specialized instructional prompts for each agentic step
+├── tools/              # Agent capabilities (web search, document writing, etc.)
+├── requirements.txt    # System dependencies
+└── seed_prompt.md      # Core directive and analytical framework for the agent
 ```
 
-## System Workflow
-1. **Document Collection**
-   - `analysis/document_collector.py` gathers content from configured sources
-   - Supports Reddit (via PRAW) and RSS feeds (via Feedparser)
+## Getting Started
 
-2. **Memory Storage**
-   - `analysis/memory_store.py` persists data using SQLite
-   - Creates FAISS index in `data/embeddings.index`
+### Prerequisites
+- Python 3.10+
 
-3. **Trend Analysis**
-   - `analysis/trend_analyzer.py` identifies patterns using semantic clustering
+### Installation
+1. Create a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. **Report Generation**
-   - `analysis/report_generator.py` produces markdown reports with structured insights
-
-## Documentation
-- [CLAUE.md](./CLAUDE.md) contains detailed development instructions for Claude Code users
-- [Program Flow Docs](#program-flow-documentation) explain the system architecture in depth
-
-## License
-MIT License - See LICENSE file for details
-```
+### Usage
+The system is designed to be driven by an LLM-based agent (such as Claude) that can execute the defined tools and prompts.
