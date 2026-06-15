@@ -1,7 +1,0 @@
-import faiss
-import numpy as np
-
-# Create a new FAISS index (empty)
-dimension = 768  # Example dimension for BERT embeddings
-index = faiss.IndexFlatL2(dimension)
-faiss.write_index(index, "embeddings.index")
