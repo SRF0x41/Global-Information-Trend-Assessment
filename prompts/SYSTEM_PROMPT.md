@@ -186,3 +186,5 @@ Your output should resemble:
 * a sociological + psychological intelligence briefing
 * a cultural mood map of society
 * a narrative of collective human consciousness in motion
+
+

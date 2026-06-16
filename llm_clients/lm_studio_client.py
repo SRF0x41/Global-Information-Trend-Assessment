@@ -42,6 +42,47 @@ class LmStudioClient:
         except requests.RequestException as e:
             self.logger.error(f"Error listing models: {e}")
             raise
+        
+    
+    def send(
+        self,
+        system: Optional[str],
+        user: str,
+        model: Optional[str] = None,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
+    ) -> Optional[str]:
+        """
+        Convenience wrapper for chat completions using system + user prompts.
+        Returns assistant content or None on failure.
+        """
+
+        messages = []
+
+        if system:
+            messages.append({"role": "system", "content": system})
+
+        messages.append({"role": "user", "content": user})
+
+        try:
+            response = self.chat_completions(
+                messages=messages,
+                model=model,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+
+            # Safe extraction (prevents KeyError crashes)
+            return (
+                response.get("choices", [{}])[0]
+                .get("message", {})
+                .get("content")
+            )
+
+        except Exception as e:
+            self.logger.error(f"Chat completion failed in send(): {e}")
+            return None
+    
 
     def chat_completions(
         self,
