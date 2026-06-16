@@ -8,6 +8,7 @@ def main():
         Preliminary flow of the program
         
         
+            PUT THE SYSTEM PROMPT EVERY TIME "role" : "system" BECAUSE LM STUDIO IS STATELESS
             
             Agent loop:
                 Planning:

@@ -1,10 +1,17 @@
 beautifulsoup4==4.15.0
+black==26.5.1
 certifi==2026.5.20
 charset-normalizer==3.4.7
+click==8.4.1
 feedparser==6.0.12
 idna==3.18
+mypy_extensions==1.1.0
+packaging==26.2
+pathspec==1.1.1
+platformdirs==4.10.0
 praw==7.8.2
 prawcore==2.4.0
+pytokens==0.4.1
 PyYAML==6.0.3
 requests==2.34.2
 sgmllib3k==1.0.0
