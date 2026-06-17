@@ -51,27 +51,44 @@ def planning():
     try:
         server_response = llm_client.chat_completions(messages=planning_payload)
         content = server_response["choices"][0]["message"]["content"]
-        # print(f"Planning Response:{content}")
+        print(f"Planning Response:{content}")
         return content
     except Exception as e:
         print(f"Failed Chat Completion: {e}")
 
 
-def write_document(text):
+def write_document(text, append_prompt: Optional[str] = None):
     write_prompt = PromptBuilder()
-    write_prompt.add_text("Here is the current state of the living document.")
-    write_prompt.add_from_file(LIVING_DOCUMENT)
     write_prompt.add_text(
-        "Given the following, make edits to the living document using the write tool"
+        
+        """
+            Given the following text, make edits to the living document, you are encouraged to make multiple edits.
+        
+        """
     )
     write_prompt.add_text(text)
+    write_prompt.add_text("Here is the living document")
+    write_prompt.add_from_file(LIVING_DOCUMENT)
+    
+    if append_prompt:
+        write_prompt.add_text(append_prompt)
 
     response = llm_client.send(
         system=Path("tools/tool_schema/write_skill.md").read_text(encoding="utf-8"),
         user=write_prompt.get_prompt(),
     )
+        
+    from parsers.response_parser import ResponseParser
+    import json
+
+    parser = ResponseParser()
+
+    tool_calls = parser.extract_tool_calls(response)
+
+    for t in tool_calls:
+        print(json.dumps(t, indent=4))
     
-    print(response)
+    
 
 
 def main():
@@ -94,7 +111,7 @@ def main():
     planning_schema = planning()
     summarize(planning_schema)
     
-    write_document(planning_schema)
+    write_document(text=planning_schema)
 
     """
             Search:

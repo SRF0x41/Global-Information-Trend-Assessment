@@ -1,14 +1,14 @@
-# Global Information Trend Assessment
+# Zeitgeist Intelligence System (ZIS)
 
-Global Information Trend Assessment (GITA) is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
+Zeitgeist Intelligence System (ZIS) is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
 
-## 🧠 Core Concept: The Living Document
+## Core Concept: The Living Document
 
 At the heart of the system is the **Living Document** (`living_document.md`). This document serves as the agent's persistent, evolving working memory and state. 
 
 The agent's goal is not to collect a list of news articles, but to **synthesize** information into a coherent, evolving model of reality. It moves from a collection of disconnected facts to a structured understanding of the "zeitgeist."
 
-## 🔄 Agentic Workflow
+## Agentic Workflow
 
 The system operates through a continuous, iterative loop of specialized agentic tasks:
 
@@ -19,7 +19,7 @@ The system operates through a continuous, iterative loop of specialized agentic 
 5.  **Refactoring:** Continuously refines the `living_document.md` to improve human readability, coherence, and depth of understanding.
 6.  **Assessment (Break):** Determines if the current model is robust or requires further investigation.
 
-## 📊 Analytical Framework
+## Analytical Framework
 
 The system evaluates signals across six key dimensions to ensure a holistic perspective:
 
@@ -30,9 +30,9 @@ The system evaluates signals across six key dimensions to ensure a holistic pers
 | **Economic** | Consumer behavior, labor trends, market sentiment, and wealth distribution. |
 | **Political** | Governance, regulation, ideology, geopolitical shifts, and institutional trust. |
 | **Social** | Demographics, relationships, community formation, and collective behavior. |
-| **Psychological**| Fear, optimism, anxiety, aspirations, and the prevailing emotional tone. |
+| **Psychological** | Fear, optimism, anxiety, aspirations, and the prevailing emotional tone. |
 
-## 📋 Reporting Structure
+## Reporting Structure
 
 The final synthesis produced by the system follows a structured format to ensure clarity and depth:
 
@@ -45,19 +45,19 @@ The final synthesis produced by the system follows a structured format to ensure
 *   **Evidence Base:** Representative observations supporting the major conclusions.
 *   **Open Questions:** Areas where confidence remains low and further investigation is required.
 
-## 🏗️ System Architecture
+## System Architecture
 
 The system is built using a modular architecture:
 
 *   **`main.py`**: The central orchestrator of the agentic loop.
 *   **`agent_reasoning/`**: Logic for constructing and managing complex agentic prompts.
 *   **`llm_clients/`**: Interfaces for interacting with Large Language Models (e.g., LM Studio, Anthropic API).
-*   **`parsers/`**: Utilities for parsing and processing various data formats.
+*   **`parsers/`**: Utilities for parsing and processing various data formats, including tool calls.
 *   **`prompts/`**: A collection of specialized instructional prompts for each step of the workflow.
 *   **`tools/`**: The agent's capabilities, including web searching and document editing.
 *   **`living_document.md`**: The evolving state and primary memory of the system.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.10+

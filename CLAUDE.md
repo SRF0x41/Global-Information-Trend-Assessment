@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-Zeitgeist Intelligence System (ZIS) is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. It focuses on identifying patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) rather than just summarizing news.
+Global Information Trend Assessment is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. It focuses on identifying patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) rather than just summarizing news.
 
 The system is built around a "Living Document" (`living_document.md`) which acts as the agent's persistent, evolving working memory and state.
 
