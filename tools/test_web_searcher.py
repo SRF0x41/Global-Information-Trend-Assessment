@@ -2,7 +2,7 @@ from web_searcher import WebSearcher  # assuming your class is saved here
 
 
 def main():
-    searcher = WebSearcher(timeout=10, max_content_chars=3000)
+    searcher = WebSearcher(timeout=10, max_content_chars=50000)
 
     query = input("Enter search query: ")
 
@@ -26,7 +26,7 @@ def main():
         print(f"URL: {r['url']}\n")
 
         # show preview of content only
-        preview = r["content"][:1000]
+        preview = r["content"]
         print("CONTENT PREVIEW:\n")
         print(preview)
         print("\n")

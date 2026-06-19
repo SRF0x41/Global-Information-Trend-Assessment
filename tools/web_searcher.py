@@ -11,7 +11,7 @@ class WebSearcher:
     using DuckDuckGo HTML results.
     """
 
-    def __init__(self, timeout: int = 10, max_content_chars: int = 8000):
+    def __init__(self, timeout: int = 10, max_content_chars: int = 60000):
         self.session = requests.Session()
         self.timeout = timeout
         self.max_content_chars = max_content_chars

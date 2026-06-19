@@ -89,6 +89,9 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     from tools.document_write import DocumentWrite
 
     writer = DocumentWrite(LIVING_DOCUMENT)
+    
+    print("writing")
+    print(80*"=")
 
     for t in tool_calls:
         print(json.dumps(t.get_raw_json(), indent=4))
