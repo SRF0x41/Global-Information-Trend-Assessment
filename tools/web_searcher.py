@@ -2,15 +2,18 @@ import requests
 from typing import Dict, List, Optional
 import json
 
+
 class WebSearcher:
     """A simple class for making web searches"""
 
     def __init__(self):
         self.session = requests.Session()
         # Set a user agent to avoid being blocked by some websites
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
+        self.session.headers.update(
+            {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+        )
 
     def search(self, query: str, num_results: int = 10) -> List[Dict[str, str]]:
         """
@@ -31,9 +34,9 @@ class WebSearcher:
         # In practice, you'd make actual API calls here
         for i in range(num_results):
             result = {
-                'title': f"Search Result {i+1} for '{query}'",
-                'url': f"https://example.com/result-{i+1}",
-                'snippet': f"This is a sample snippet for result {i+1} about '{query}'"
+                "title": f"Search Result {i+1} for '{query}'",
+                "url": f"https://example.com/result-{i+1}",
+                "snippet": f"This is a sample snippet for result {i+1} about '{query}'",
             }
             results.append(result)
 
@@ -55,8 +58,8 @@ class WebSearcher:
         results = self.search(query, num_results)
 
         return {
-            'query': query,
-            'total_results': len(results),
-            'results': results,
-            'timestamp': '2026-06-14T00:00:00Z'
+            "query": query,
+            "total_results": len(results),
+            "results": results,
+            "timestamp": "2026-06-14T00:00:00Z",
         }

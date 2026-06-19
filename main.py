@@ -3,6 +3,8 @@ import logging
 from llm_clients.lm_studio_client import LmStudioClient
 from pathlib import Path
 from agent_reasoning.prompt_builder import PromptBuilder
+from parsers.response_parser import ResponseParser
+import json
 
 # Configure logging
 logging.basicConfig(
@@ -57,39 +59,44 @@ def planning():
         print(f"Failed Chat Completion: {e}")
 
 
-def write_document(text, append_prompt: Optional[str] = None):
+def write_document_test(text, append_prompt: Optional[str] = None):
     write_prompt = PromptBuilder()
-    write_prompt.add_text(
+    write_prompt.add_text("""
+            Here are the notes you have taken.
         
-        """
-            Given the following text, make edits to the living document, you are encouraged to make multiple edits.
-        
-        """
-    )
+        """)
     write_prompt.add_text(text)
-    write_prompt.add_text("Here is the living document")
+    write_prompt.add_text(
+        "With the notes, make edits to the following living document."
+    )
     write_prompt.add_from_file(LIVING_DOCUMENT)
-    
+    write_prompt.add_text("The following text will be your guide on tool use.")
+    write_prompt.add_from_file(Path("tools/tool_schema/write_skill.md"))
+
     if append_prompt:
         write_prompt.add_text(append_prompt)
 
     response = llm_client.send(
-        system=Path("tools/tool_schema/write_skill.md").read_text(encoding="utf-8"),
+        system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
         user=write_prompt.get_prompt(),
     )
-        
-    from parsers.response_parser import ResponseParser
-    import json
+
+    print(response)
 
     parser = ResponseParser()
 
     tool_calls = parser.extract_tool_calls(response)
+    from tools.document_write import DocumentWrite
+
+    writer = DocumentWrite(LIVING_DOCUMENT)
 
     for t in tool_calls:
-        print(json.dumps(t, indent=4))
-    
-    
-
+        print(json.dumps(t.get_raw_json(), indent=4))
+        target = t.get_tool_arguments().get("target")
+        value = t.get_tool_arguments().get("value")
+        print(target)
+        print(value)
+        writer.update(target,value)
 
 def main():
     """
@@ -110,8 +117,8 @@ def main():
     """
     planning_schema = planning()
     summarize(planning_schema)
-    
-    write_document(text=planning_schema)
+
+    write_document_test(text=planning_schema)
 
     """
             Search:
@@ -141,3 +148,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # import subprocess
+    # import sys
+    # subprocess.run([sys.executable, "reset_living_doc.py"])
+    
+    

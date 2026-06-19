@@ -1,48 +1,29 @@
 import os
-
-
 class DocumentWrite:
-    """Select certain lines of text to be replaced"""
+    """Replace a target string inside a markdown document."""
 
-    def __init__(self, source):
+    def __init__(self, source_file: str):
+        self._source_file = source_file
+
+        if not os.path.exists(self._source_file):
+            raise FileNotFoundError(f"Source file not found: {self._source_file}")
+
+    def update(self, target: str, value: str):
         """
-        Store source file internally as object state.
-        
-        Args:
-            source (str): Path to markdown file containing text to find in target
-        """
-        if not os.path.exists(source):
-            raise FileNotFoundError(f"Source file not found: {source}")
-
-        self._source = source  # internal private variable
-
-    def update(self, target, value):
-        """
-        Replace a block of text in a target markdown file with new content.
-
-        Args:
-            target (str): Path to markdown file to modify
-            value (str): Replacement text
+        Replace first occurrence of `target` string with `value`.
         """
 
-        # --- Read source file (text to locate in target)
-        with open(self._source, "r", encoding="utf-8") as f:
-            source_text = f.read().strip()
+        # Read file
+        with open(self._source_file, "r", encoding="utf-8") as f:
+            text = f.read()
 
-        # --- Read target file
-        if not os.path.exists(target):
-            raise FileNotFoundError(f"Target file not found: {target}")
+        # Validate match
+        if target not in text:
+            raise ValueError(f"Target text not found in document:\n{target}")
 
-        with open(target, "r", encoding="utf-8") as f:
-            target_text = f.read()
+        # Replace only first occurrence
+        updated_text = text.replace(target, value, 1)
 
-        # --- Ensure match exists
-        if source_text not in target_text:
-            raise ValueError("Source text not found in target file")
-
-        # --- Replace first occurrence only
-        updated_text = target_text.replace(source_text, value, 1)
-
-        # --- Write back to target
-        with open(target, "w", encoding="utf-8") as f:
+        # Write back
+        with open(self._source_file, "w", encoding="utf-8") as f:
             f.write(updated_text)

@@ -2,6 +2,7 @@ import requests
 import logging
 from typing import Any, Dict, List, Optional, Union
 
+
 class LmStudioClient:
     """
     A client for interacting with LM Studio and other OpenAI-compatible APIs.
@@ -11,7 +12,7 @@ class LmStudioClient:
         self,
         base_url: str = "http://127.0.0.1:1234/v1",
         api_key: str = "not-needed",
-        timeout = None,
+        timeout=None,
     ):
         """
         Initialize the client.
@@ -36,14 +37,15 @@ class LmStudioClient:
         """List available models."""
         url = f"{self.base_url}/models"
         try:
-            response = requests.get(url, headers=self._get_headers(), timeout=self.timeout)
+            response = requests.get(
+                url, headers=self._get_headers(), timeout=self.timeout
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
             self.logger.error(f"Error listing models: {e}")
             raise
-        
-    
+
     def send(
         self,
         system: Optional[str],
@@ -73,16 +75,11 @@ class LmStudioClient:
             )
 
             # Safe extraction (prevents KeyError crashes)
-            return (
-                response.get("choices", [{}])[0]
-                .get("message", {})
-                .get("content")
-            )
+            return response.get("choices", [{}])[0].get("message", {}).get("content")
 
         except Exception as e:
             self.logger.error(f"Chat completion failed in send(): {e}")
             return None
-    
 
     def chat_completions(
         self,
@@ -110,7 +107,9 @@ class LmStudioClient:
         payload = {k: v for k, v in payload.items() if v is not None}
 
         try:
-            response = requests.post(url, headers=self._get_headers(), json=payload, timeout=self.timeout)
+            response = requests.post(
+                url, headers=self._get_headers(), json=payload, timeout=self.timeout
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -142,7 +141,9 @@ class LmStudioClient:
         payload = {k: v for k, v in payload.items() if v is not None}
 
         try:
-            response = requests.post(url, headers=self._get_headers(), json=payload, timeout=self.timeout)
+            response = requests.post(
+                url, headers=self._get_headers(), json=payload, timeout=self.timeout
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -165,7 +166,9 @@ class LmStudioClient:
         payload = {k: v for k, v in payload.items() if v is not None}
 
         try:
-            response = requests.post(url, headers=self._get_headers(), json=payload, timeout=self.timeout)
+            response = requests.post(
+                url, headers=self._get_headers(), json=payload, timeout=self.timeout
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -182,15 +185,13 @@ class LmStudioClient:
         Create a response (custom endpoint provided by user).
         """
         url = f"{self.base_url}/responses"
-        payload = {
-            "messages": messages,
-            "model": model,
-            **kwargs
-        }
+        payload = {"messages": messages, "model": model, **kwargs}
         payload = {k: v for k, v in payload.items() if v is not None}
 
         try:
-            response = requests.post(url, headers=self._get_headers(), json=payload, timeout=self.timeout)
+            response = requests.post(
+                url, headers=self._get_headers(), json=payload, timeout=self.timeout
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -199,4 +200,3 @@ class LmStudioClient:
 
     def __repr__(self) -> str:
         return f"<LmStudioAPI(base_url='{self.base_url}')>"
-

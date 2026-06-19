@@ -1,6 +1,7 @@
 import re
 import json
 from typing import List, Dict, Any
+from .tool import Tool
 
 class ResponseParser:
     """
@@ -8,41 +9,19 @@ class ResponseParser:
     """
 
     def __init__(self):
-        self.tool_call_pattern = re.compile(
-            r"<tool_call>(.*?)</tool_call>",
-            re.DOTALL
-        )
+        self.tool_call_pattern = re.compile(r"<tool_call>(.*?)</tool_call>", re.DOTALL)
 
-    def extract_tool_calls(self, text: str) -> List[Dict[str, Any]]:
+    def extract_tool_calls(self, text: str) -> List[Tool]:
         """
         Extract all valid tool call JSON objects.
-
-        Example:
-
-        <tool_call>
-        {
-            "name": "web_search",
-            "arguments": {
-                "query": "AI news"
-            }
-        }
-        </tool_call>
-
-        Returns:
-        [
-            {
-                "name": "web_search",
-                "arguments": {
-                    "query": "AI news"
-                }
-            }
-        ]
         """
         tool_calls = []
 
         for match in self.tool_call_pattern.findall(text):
             try:
-                tool_calls.append(json.loads(match.strip()))
+                tool_call = json.loads(match.strip())
+                tool_calls.append(Tool(tool_call))
+
             except json.JSONDecodeError:
                 continue
 

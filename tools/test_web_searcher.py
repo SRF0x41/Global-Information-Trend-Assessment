@@ -5,6 +5,7 @@ Test script for WebSearcher class
 
 from web_searcher import WebSearcher
 
+
 def main():
     # Create an instance of WebSearcher
     searcher = WebSearcher()
@@ -27,11 +28,12 @@ def main():
     print(f"Total results: {detailed_results['total_results']}")
     print(f"Timestamp: {detailed_results['timestamp']}")
 
-    for result in detailed_results['results']:
+    for result in detailed_results["results"]:
         print(f"Title: {result['title']}")
         print(f"URL: {result['url']}")
         print(f"Snippet: {result['snippet']}")
         print("-" * 50)
+
 
 if __name__ == "__main__":
     main()

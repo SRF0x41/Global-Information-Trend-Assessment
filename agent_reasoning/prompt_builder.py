@@ -1,5 +1,6 @@
 import os
 
+
 class PromptBuilder:
     def __init__(self):
         self.__components = []
