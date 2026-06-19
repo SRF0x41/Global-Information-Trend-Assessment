@@ -1,6 +1,6 @@
-# Zeitgeist Intelligence System (ZIS)
+# Global Information Trend Assessment
 
-Zeitgeist Intelligence System (ZIS) is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
+Global Information Trend Assessment is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
 
 ## Core Concept: The Living Document
 
@@ -17,7 +17,7 @@ The system operates through a continuous, iterative loop of specialized agentic 
 3.  **Extraction:** Processes information to identify "signals"—patterns, themes, or tensions—rather than mere summaries.
 4.  **Comparison:** Evaluates new signals to see if they support, weaken, or contradict existing narratives in the document.
 5.  **Refactoring:** Continuously refines the `living_document.md` to improve human readability, coherence, and depth of understanding.
-6.  **Assessment (Break):** Determines if the current model is robust or requires further investigation.
+6.  **Assessment:** Determines if the current model is robust or requires further investigation.
 
 ## Analytical Framework
 
@@ -47,12 +47,12 @@ The final synthesis produced by the system follows a structured format to ensure
 
 ## System Architecture
 
-The system is built using a modular architecture:
+The system is built using a modular architecture designed for extensible agentic research:
 
 *   **`main.py`**: The central orchestrator of the agentic loop.
-*   **`agent_reasoning/`**: Logic for constructing and managing complex agentic prompts.
-*   **`llm_clients/`**: Interfaces for interacting with Large Language Models (e.g., LM Studio, Anthropic API).
-*   **`parsers/`**: Utilities for parsing and processing various data formats, including tool calls.
+*   **`agent_reasoning/`**: Logic for constructing and managing complex agentic prompts and reasoning chains.
+*   **`llm_clients/`**: Interfaces for interacting with various Large Language Models (e.g., LM Studio, Anthropic API).
+*   **`parsers/`**: Utilities for parsing and processing various data formats and tool calls.
 *   **`prompts/`**: A collection of specialized instructional prompts for each step of the workflow.
 *   **`tools/`**: The agent's capabilities, including web searching and document editing.
 *   **`living_document.md`**: The evolving state and primary memory of the system.
@@ -80,3 +80,10 @@ Run the agentic loop:
 ```bash
 python main.py
 ```
+
+
+## Roadmap
+
+*   **Primary Source Analysis:** Focus on analyzing primary sources (e.g., trending songs, social media posts, popular media) to better understand underlying cultural sentiment and messaging (try to diffrentiate between organic popularity and private intrest popularity).
+*   **Expanded Domain Support:** Further integrate more granular data points into the six key dimensions.
+*   **Automated Assessment Loops:** Refine the assessment step to trigger deeper, autonomous investigations into conflicting signals.

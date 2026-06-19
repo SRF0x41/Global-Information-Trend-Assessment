@@ -1,38 +1,35 @@
-#!/usr/bin/env python3
-"""
-Test script for WebSearcher class
-"""
-
-from web_searcher import WebSearcher
+from web_searcher import WebSearcher  # assuming your class is saved here
 
 
 def main():
-    # Create an instance of WebSearcher
-    searcher = WebSearcher()
+    searcher = WebSearcher(timeout=10, max_content_chars=3000)
 
-    # Perform a simple search
-    print("Performing a simple search...")
-    results = searcher.search("Python programming", 5)
+    query = input("Enter search query: ")
 
-    for result in results:
-        print(f"Title: {result['title']}")
-        print(f"URL: {result['url']}")
-        print(f"Snippet: {result['snippet']}")
-        print("-" * 50)
+    print("\n Searching...\n")
 
-    # Perform a detailed search
-    print("\nPerforming a detailed search...")
-    detailed_results = searcher.search_detailed("machine learning", 3)
+    results = searcher.search(query, num_results=3)
 
-    print(f"Query: {detailed_results['query']}")
-    print(f"Total results: {detailed_results['total_results']}")
-    print(f"Timestamp: {detailed_results['timestamp']}")
+    for i, r in enumerate(results, 1):
+        print(f"{i}. {r['title']}")
+        print(f"   URL: {r['url']}")
+        print(f"   Snippet: {r['snippet']}\n")
 
-    for result in detailed_results["results"]:
-        print(f"Title: {result['title']}")
-        print(f"URL: {result['url']}")
-        print(f"Snippet: {result['snippet']}")
-        print("-" * 50)
+    print("\n📄 Fetching full page content...\n")
+
+    detailed = searcher.search_and_read(query, num_results=2)
+
+    for i, r in enumerate(detailed, 1):
+        print("=" * 80)
+        print(f"PAGE {i}")
+        print(f"TITLE: {r['title']}")
+        print(f"URL: {r['url']}\n")
+
+        # show preview of content only
+        preview = r["content"][:1000]
+        print("CONTENT PREVIEW:\n")
+        print(preview)
+        print("\n")
 
 
 if __name__ == "__main__":
