@@ -110,7 +110,7 @@ class WebSearcher:
 
             extracted = trafilatura.extract(html)
             if extracted:
-                return extracted[:self.max_content_chars]
+                return extracted[: self.max_content_chars]
         except Exception:
             pass
 
@@ -127,7 +127,7 @@ class WebSearcher:
         lines = [line.strip() for line in text.splitlines()]
         clean_text = "\n".join(line for line in lines if line)
 
-        return clean_text[:self.max_content_chars]
+        return clean_text[: self.max_content_chars]
 
     # ----------------------------
     # SEARCH + READ

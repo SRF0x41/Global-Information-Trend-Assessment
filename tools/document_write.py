@@ -1,4 +1,6 @@
 import os
+
+
 class DocumentWrite:
     """Replace a target string inside a markdown document."""
 

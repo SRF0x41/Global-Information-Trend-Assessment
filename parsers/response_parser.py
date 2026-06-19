@@ -3,6 +3,7 @@ import json
 from typing import List, Dict, Any
 from .tool import Tool
 
+
 class ResponseParser:
     """
     Parses response text to extract tool calls.

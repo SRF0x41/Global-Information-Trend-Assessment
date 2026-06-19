@@ -96,7 +96,8 @@ def write_document_test(text, append_prompt: Optional[str] = None):
         value = t.get_tool_arguments().get("value")
         print(target)
         print(value)
-        writer.update(target,value)
+        writer.update(target, value)
+
 
 def main():
     """
@@ -151,5 +152,3 @@ if __name__ == "__main__":
     # import subprocess
     # import sys
     # subprocess.run([sys.executable, "reset_living_doc.py"])
-    
-    
