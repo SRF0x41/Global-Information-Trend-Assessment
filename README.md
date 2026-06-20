@@ -50,9 +50,6 @@ The final synthesis produced by the system follows a structured format to ensure
 The system is built using a modular architecture designed for extensible agentic research:
 
 *   **`main.py`**: The central orchestrator of the agentic loop.
-*   **`agent_reasoning/`**: Logic for constructing and managing complex agentic prompts and reasoning chains.
-*   **`llm_clients/`**: Interfaces for interacting with various Large Language Models (e.g., LM Studio, Anthropic API).
-*   **`parsers/`**: Utilities for parsing and processing various data formats and tool calls.
 *   **`prompts/`**: A collection of specialized instructional prompts for each step of the workflow.
 *   **`tools/`**: The agent's capabilities, including web searching and document editing.
 *   **`living_document.md`**: The evolving state and primary memory of the system.
@@ -81,9 +78,24 @@ Run the agentic loop:
 python main.py
 ```
 
+## Key Components
+
+### Prompts
+The system uses specialized prompt files for each step of the workflow:
+- `PLAN_PROMPT.md`: For planning the research strategy
+- `SEARCH_PROMPT.md`: For conducting web searches
+- `EXTRACT_PROMPT.md`: For extracting signals from content
+- `COMPARE_PROMPT.md`: For comparing new information with existing knowledge
+- `REFINE_PROMPT.md`: For refining and improving the living document
+- `ASSESSMENT_PROMPT.md`: For assessing the robustness of the current model
+
+### Tools
+The system includes several core tools:
+- **Web Searcher**: Performs web searches using DuckDuckGo and extracts content from results
+- **Document Writer**: Updates the living document with new information
 
 ## Roadmap
 
-*   **Primary Source Analysis:** Focus on analyzing primary sources (e.g., trending songs, social media posts, popular media) to better understand underlying cultural sentiment and messaging (try to diffrentiate between organic popularity and private intrest popularity).
+*   **Primary Source Analysis:** Focus on analyzing primary sources (e.g., trending songs, social media posts, popular media) to better understand underlying cultural sentiment and messaging (try to differentiate between organic popularity and private interest popularity).
 *   **Expanded Domain Support:** Further integrate more granular data points into the six key dimensions.
 *   **Automated Assessment Loops:** Refine the assessment step to trigger deeper, autonomous investigations into conflicting signals.
