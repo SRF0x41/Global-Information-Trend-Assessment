@@ -13,18 +13,22 @@ class DocumentWrite:
     def update(self, target: str, value: str):
         """
         Replace first occurrence of `target` string with `value`.
+        If target is None or empty, append value to the end.
         """
 
         # Read file
         with open(self._source_file, "r", encoding="utf-8") as f:
             text = f.read()
 
-        # Validate match
-        if target not in text:
-            raise ValueError(f"Target text not found in document:\n{target}")
+        if not target:
+            updated_text = text + value
+        else:
+            # Validate match
+            if target not in text:
+                raise ValueError(f"Target text not found in document:\n{target}")
 
-        # Replace only first occurrence
-        updated_text = text.replace(target, value, 1)
+            # Replace only first occurrence
+            updated_text = text.replace(target, value, 1)
 
         # Write back
         with open(self._source_file, "w", encoding="utf-8") as f:

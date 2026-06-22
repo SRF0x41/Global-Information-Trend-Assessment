@@ -129,8 +129,11 @@ def main():
             living document + SEARCH_PROMPT + TOOL_SCHEMA
                 - Conduct web searches according to the plan set out in the living document
                 - Tools call to search and edit living document, remember all notes are kept in the living documents,
-                write notes and analyses directly to the living document.
-
+                write notes and analyses directly to the living document.            
+    """
+    
+    
+    """
             Extract:
             living document + EXTRACT_PROMPT + TOOL_SCHEMA
                 - Extract relevant 'signals' and edit the living document
