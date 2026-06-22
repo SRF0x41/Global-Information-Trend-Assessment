@@ -22,6 +22,7 @@ praw==7.8.2
 prawcore==2.4.0
 Pygments==2.20.0
 pytest==9.1.1
+pytest-mock==3.14.0
 python-dateutil==2.9.0.post0
 pytokens==0.4.1
 pytz==2026.2

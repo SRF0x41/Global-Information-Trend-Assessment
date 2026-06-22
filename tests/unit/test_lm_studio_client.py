@@ -68,7 +68,8 @@ def test_chat_completions_payload(client, monkeypatch):
     args, kwargs = post_mock.call_args
     assert kwargs["json"]["temperature"] == 0.7
     assert kwargs["json"]["max_tokens"] == 100
-    assert kwargs["json"]["model"] is None  # Should be removed if None
+    # The model parameter should be filtered out when None (as per implementation)
+    assert "model" not in kwargs["json"]
 
 def test_embeddings_success(client, monkeypatch):
     mock_response = MagicMock()
