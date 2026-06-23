@@ -62,10 +62,12 @@ def planning():
 
 def write_document_test(text, append_prompt: Optional[str] = None):
     write_prompt = PromptBuilder()
-    write_prompt.add_text("""
+    write_prompt.add_text(
+        """
             Here are the notes you have taken.
         
-        """)
+        """
+    )
     write_prompt.add_text(text)
     write_prompt.add_text(
         "With the notes, make edits to the following living document."
@@ -90,9 +92,9 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     from tools.document_write import DocumentWrite
 
     writer = DocumentWrite(LIVING_DOCUMENT)
-    
+
     print("writing")
-    print(80*"=")
+    print(80 * "=")
 
     for t in tool_calls:
         # print(json.dumps(t.get_raw_json(), indent=4))
@@ -101,16 +103,52 @@ def write_document_test(text, append_prompt: Optional[str] = None):
         # print(target)
         # print(value)
         writer.update(target, value)
+
+def search():
+    SEARCH_PROMPT = Path("prompts/SEARCH_PROMPT.md")
+    search_prompt = PromptBuilder()
+    search_prompt.add_from_file(SEARCH_PROMPT)
+    search_prompt.add_text("Here is the current state of the Living Document.")
+    search_prompt.add_from_file(LIVING_DOCUMENT)
+    search_prompt.add_text(
+        "You will now produce a comprehensive list of searches using the following tool."
+    )
+    SEARCH_TOOL_CARD = Path("tools/tool_schema/web_searcher_skill.md")
+    search_prompt.add_from_file(SEARCH_TOOL_CARD)
+
+    response = llm_client.send(
+        system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
+        user=search_prompt.get_prompt(),
+    )
+
+    parser = ResponseParser()
+    tool_calls = parser.extract_tool_calls(response)
     
-    
-    
-    def search():
-        SEARCH_PROMPT = Path('prompts/SEARCH_PROMPT.md')
-        search_prompt = PromptBuilder()
-        search_prompt.add_from_file(SEARCH_PROMPT)
-        search_prompt.add_text('Here is the current state of the Living Document.')
-        search_prompt.add_from_file(LIVING_DOCUMENT)
-        search_prompt.add_text('You will now be instructed to ')
+    print(response)
+
+    from tools.web_searcher import WebSearcher
+    web_search = WebSearcher()
+    for t in tool_calls:
+        query = t.get_tool_arguments().get("query")
+        results = web_search.search_and_read(query=query)
+        print(f"Searching {query}")
+        searched_data = PromptBuilder()
+        for s in results:
+            searched_data.add_from_file(Path('prompts/EXTRACT_PROMPT.md'))
+            searched_data.add_from_file(SYSTEM_PROMPT)
+            result = f"Title: {s.get('title')} \n url: {s.get('url')} content: {s.get('content')}"
+            searched_data.add_text(result)
+
+            response = llm_client.send(
+                system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
+                user=searched_data.get_prompt()
+            )
+
+            print(response)
+                
+               
+            
+            
 
 
 def main():
@@ -130,10 +168,10 @@ def main():
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
     """
-    planning_schema = planning()
-    summarize(planning_schema)
+    # planning_schema = planning()
+    # summarize(planning_schema)
 
-    write_document_test(text=planning_schema)
+    # write_document_test(text=planning_schema)
 
     """
             Search:
@@ -143,7 +181,8 @@ def main():
                 write notes and analyses directly to the living document.            
     """
     
-    
+    search()
+
     """
             Extract:
             living document + EXTRACT_PROMPT + TOOL_SCHEMA

@@ -3,7 +3,7 @@ import tiktoken
 
 
 class PromptBuilder:
-    def __init__(self, max_tokens: int = 32000):
+    def __init__(self, max_tokens: int = 8000):
         self.__components = []
         self.__sources = []
         self.__token_counts = []

@@ -132,7 +132,7 @@ class WebSearcher:
     # ----------------------------
     # SEARCH + READ
     # ----------------------------
-    def search_and_read(self, query: str, num_results: int = 3) -> List[Dict[str, Any]]:
+    def search_and_read(self, query: str, num_results: int = 5) -> List[Dict[str, Any]]:
         results = self.search(query, num_results=num_results)
 
         enriched = []
