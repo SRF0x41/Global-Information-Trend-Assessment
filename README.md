@@ -94,8 +94,33 @@ The system includes several core tools:
 - **Web Searcher**: Performs web searches using DuckDuckGo and extracts content from results
 - **Document Writer**: Updates the living document with new information
 
+## Development Guide
+
+This project is designed to be an autonomous research agent that continuously evolves its understanding of the current zeitgeist. The development approach emphasizes:
+
+1. **Modular Prompt Engineering**: Each step of the workflow has a dedicated prompt file for precise control over agent behavior
+2. **Living Document Architecture**: The system maintains a persistent, evolving knowledge base that guides future research
+3. **Cross-Domain Analysis**: Integration of psychological, social, and cultural insights to avoid shallow news analysis
+
+### Core Development Patterns
+
+- **Prompt Separation**: Each stage has its own specialized prompt to ensure precise agent behavior
+- **State Persistence**: The `living_document.md` maintains all state between iterations
+- **Iterative Refinement**: The system continuously improves its understanding through feedback loops
+- **Domain Integration**: All analysis considers the six key domains to avoid narrow perspectives
+
 ## Roadmap
 
 *   **Primary Source Analysis:** Focus on analyzing primary sources (e.g., trending songs, social media posts, popular media) to better understand underlying cultural sentiment and messaging (try to differentiate between organic popularity and private interest popularity).
 *   **Expanded Domain Support:** Further integrate more granular data points into the six key dimensions.
 *   **Automated Assessment Loops:** Refine the assessment step to trigger deeper, autonomous investigations into conflicting signals.
+*   **Enhanced Tool Integration:** Expand tool capabilities to include more diverse data sources and analysis methods.
+
+## Contributing
+
+This is an experimental research framework. Contributions are welcome in the form of:
+
+- Improvements to prompt engineering
+- Expansion of analytical frameworks
+- Enhancements to search strategies
+- Development of new tools for analysis

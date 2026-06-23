@@ -23,6 +23,7 @@ PLAN_PROMPT = Path("prompts/PLAN_PROMPT.md")
 LIVING_DOCUMENT = Path("living_document.md")
 WRITE_TO_LIVING_DOCUMENT = Path("WRITE_TO_LIVING_DOCUMENT.md")
 
+
 # md_content = Path("report.md").read_text(encoding="utf-8")
 
 
@@ -94,12 +95,22 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     print(80*"=")
 
     for t in tool_calls:
-        print(json.dumps(t.get_raw_json(), indent=4))
+        # print(json.dumps(t.get_raw_json(), indent=4))
         target = t.get_tool_arguments().get("target")
         value = t.get_tool_arguments().get("value")
-        print(target)
-        print(value)
+        # print(target)
+        # print(value)
         writer.update(target, value)
+    
+    
+    
+    def search():
+        SEARCH_PROMPT = Path('prompts/SEARCH_PROMPT.md')
+        search_prompt = PromptBuilder()
+        search_prompt.add_from_file(SEARCH_PROMPT)
+        search_prompt.add_text('Here is the current state of the Living Document.')
+        search_prompt.add_from_file(LIVING_DOCUMENT)
+        search_prompt.add_text('You will now be instructed to ')
 
 
 def main():
