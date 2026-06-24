@@ -1,5 +1,5 @@
 """
-Tools package for the Global Information Trend Assessment project
+Tools package for the Information Trend Assessment project
 """
 
 from .web_searcher import WebSearcher

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sample usage of the TextExtractor tool for the Global Information Trend Assessment system.
+Sample usage of the TextExtractor tool for the Information Trend Assessment system.
 This file demonstrates various ways to use the TextExtractor class.
 """
 

@@ -1,29 +1,88 @@
-# Global Information Trend Assessment (GITA)
+# Information Trend Assessment (ITA)
 
-An autonomous, agentic research framework designed to model the evolving global zeitgeist. Rather than summarizing news, the system identifies patterns, narratives, and tensions across psychological, social, and cultural domains to build a multidimensional model of the present moment.
+An autonomous, agentic research framework that models the evolving zeitgeist. ITA is not a news aggregator or trend reporter — it is a cultural intelligence system. It gathers evidence, identifies patterns, and then draws bold, grounded conclusions about what those patterns collectively suggest about the human condition right now.
 
-## Core Concept: The Living Document
+The system reads like a cultural critic who has done the research: it observes, it interprets, and it synthesizes.
 
-At the heart of the system is the **Living Document** (`living_document.md`). This document serves as the agent's persistent, evolving working memory. The agent does not collect articles — it synthesizes information into a coherent, provisional model of reality, continuously revising itself as new evidence arrives.
+## What ITA Does
 
-The analytical lens operates through three interconnected layers:
+ITA maintains a **Living Document** — a provisional, revisable model of the present moment. Each research cycle:
 
-| Layer | Focus Areas |
+1. **Reads the current model** and identifies what's uncertain, contradictory, or incomplete
+2. **Gathers new evidence** through recency-anchored web searches
+3. **Extracts meaningful signals** — patterns in how people think, feel, behave, and organize
+4. **Draws conclusions** — not just summarizing what was found, but answering *"so what does all of this mean?"*
+
+The output is not a report. It's an evolving cultural analysis — the kind of writing that connects a shift in aesthetic taste to a change in how people form communities, then to a deeper psychological tension about identity. The constraint is grounding, not caution.
+
+## The Analytical Lens
+
+ITA observes reality through three interconnected layers:
+
+| Layer | What It Examines |
 | :--- | :--- |
-| **Psychological** | Emotional patterns, motivations, fears, desires, identity construction, meaning-making, attention, cognition |
-| **Social** | Collective behavior, group formation, trust systems, social norms, institutions, belonging, status |
+| **Psychological** | Emotional patterns, motivations, fears, desires, identity construction, meaning-making, attention, cognition, adaptation |
+| **Social** | Collective behavior, group formation, trust systems, social norms, institutions, belonging, status, coordination |
 | **Cultural** | Narratives, symbols, aesthetics, rituals, media ecosystems, language shifts, humor, collective myths |
+
+But observation is only the starting point. The system's core task is **synthesis** — weaving signals across these layers into coherent interpretations about the direction of collective human experience.
 
 ## Agentic Workflow
 
-The system operates through a continuous, iterative loop:
+```
+┌──────────────────────────────────────────────────────────┐
+│                    LIVING DOCUMENT STATE                  │
+│              (persistent, evolving model)                 │
+└────┬─────────────────────────────────────┬───────────────┘
+     │                                    │
+     ▼                                    ▼
+┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
+│  PLAN    │ ->│  SEARCH  │ ->│ EXTRACT  │ ->│ UPDATE   │
+│ Find     │   │ Gather   │   │ Signals  │   │ Living   │
+│ gaps,   │   │ evidence │   │ from     │   │ Document │
+│ blind   │   │          │   │ sources  │   │          │
+│ spots,  │   │          │   │          │   │          │
+│ write   │   │          │   │          │   │          │
+│ synthesis│  │          │   │          │   │          │
+└──────────┘   └──────────┘   └──────────┘   └──────────┘
+     │                                                      │
+     │        ┌──────────┐   ┌──────────┐                  │
+     └───────│ COMPARE  │ ->│ ASSESS   │──────────────────┘
+             │ New vs.  │   │ Model    │  (cycle continues)
+             │ existing │   │ robust?  │
+             │ narratives│  │          │
+             └──────────┘   └──────────┘
+```
 
-1. **Planning** — Identifies uncertainties, contradictions, and blind spots in the Living Document. Proposes research directions that could materially change the model.
-2. **Search** — Executes targeted web searches (via DuckDuckGo or Serper) anchored to the present moment, with recency language to prioritize recent signals.
-3. **Extraction** — Processes gathered content to identify "signals" — recurring patterns, behaviors, tensions — rather than mere summaries.
-4. **Comparison** — Evaluates new signals against existing narratives. Does new evidence support, weaken, or contradict the current model?
-5. **Document Update** — Surgically updates the Living Document with validated signals and revised hypotheses.
-6. **Assessment** — Determines if the current model is robust or requires further investigation.
+Each phase does two kinds of work:
+
+| Phase | Mechanical Work | Interpretive Work |
+| :--- | :--- | :--- |
+| **Plan** | Identify gaps, generate search queries | Write a "Current Synthesis" — what does the model as a whole suggest about this moment? |
+| **Search** | Execute recency-anchored queries | Note patterns, contradictions, and surprises that inform next steps |
+| **Extract** | Pull signals from sources, ground in evidence | Draw bold conclusions, weave signals into narrative, answer "so what?" |
+| **Compare** | Evaluate new signals against existing model | Determine whether the overall interpretation of the moment is shifting |
+| **Assess** | Check model robustness | Judge whether the picture is coherent or fundamentally unsettled |
+
+## Core Concept: The Living Document
+
+The Living Document (`living_document.md`) has two zones:
+
+- **Working Notes (Scratchpad)** — Raw observations, half-formed thoughts, tentative connections. Tagged `[UNVERIFIED]`, `[SUPPORTED]`, or `[CONTRADICTED]`.
+- **Structured Sections** — Polished, evidence-backed analysis: emerging signals, active narratives, contradictions, blind spots, foundational hypotheses, and **interpretation**.
+
+Signals migrate from scratchpad to structured sections only when multiple independent sources support them. The Interpretation section is where the system answers the big question: *what does all of this collectively suggest?*
+
+## Key Design Principles
+
+- **Recency as baseline** — all searches anchor to the present moment first, then expand backward for historical context
+- **Discovery over confirmation** — treat all narratives as hypotheses; actively seek contradictory evidence
+- **Synthesis over summary** — don't just report what was found, draw conclusions about what it means
+- **Bold but grounded** — creative leaps are expected, but every leap must be traceable back to evidence
+- **Signal density over volume** — prefer a few meaningful observations over many weak ones
+- **Emergence over taxonomy** — allow explanatory frameworks to emerge from the data, not force observations into predefined categories
+- **Behavior over headlines** — observed human behavior is more revealing than stated beliefs or news events
+- **Tension over stability** — contradictions are often more revealing than consensus
 
 ## System Architecture
 
@@ -33,14 +92,14 @@ living_document.md               # Central persistent state and working memory
 original_living_document.md      # Original template (backup reference)
 
 prompts/
-├── SYSTEM_PROMPT.md             # Master persona: cultural analyst / zeitgeist interpreter
-├── PLAN_PROMPT.md               # Planning layer: identify gaps, propose research
-├── SEARCH_PROMPT.md             # Search layer: recency-anchored query generation
-├── EXTRACT_PROMPT.md            # Extraction layer: signal identification from sources
-├── COMPARE_PROMPT.md            # Comparison layer: new vs existing narratives
-├── ASSESSMENT_PROMPT.md         # Assessment layer: model robustness check
-├── EDIT_PROMPT.md               # Document editing instructions
-└── GDELT_DOCUMENTATION.md       # GDELT API reference
+├── SYSTEM_PROMPT.md             # Master persona, analytical lens, synthesis framework
+├── PLAN_PROMPT.md               # Model evaluation, gap analysis, synthesis writing
+├── SEARCH_PROMPT.md             # Recency-anchored query generation and execution
+├── EXTRACT_PROMPT.md            # Signal extraction, interpretation, narrative synthesis
+├── COMPARE_PROMPT.md            # Compare new signals against existing model
+├── ASSESSMENT_PROMPT.md         # Model robustness assessment
+├── EDIT_PROMPT.md               # Surgical document update instructions
+└── GDELT_DOCUMENTATION.md       # GDELT API reference for global media monitoring
 
 tools/
 ├── web_searcher.py              # DuckDuckGo search + page reader
@@ -110,17 +169,9 @@ python main.py
 
 Currently `main.py` runs the search query generation loop. The full agentic cycle (plan → search → extract → compare → assess) is being wired up incrementally.
 
-## Key Design Principles
-
-- **Recency as baseline** — all searches anchor to the present moment first, then expand backward when historical context is needed
-- **Discovery over confirmation** — treat all narratives as hypotheses; actively seek contradictory evidence
-- **Signal density over volume** — prefer a few meaningful observations over many weak ones
-- **Emergence over taxonomy** — do not force observations into predefined categories; allow explanatory frameworks to emerge from the data
-- **Behavior over headlines** — observed human behavior is more revealing than stated beliefs or news events
-
 ## Roadmap
 
-- **Full agentic loop** — wire up the complete plan → search → extract → compare → refactor → assess cycle
+- **Full agentic loop** — wire up the complete plan → search → extract → compare → assess cycle
 - **GDELT integration** — incorporate global media monitoring for cross-regional signal detection
 - **Primary source analysis** — analyze trending media, social posts, and cultural artifacts for organic sentiment
 - **Automated assessment loops** — trigger deeper investigations when conflicting signals are detected

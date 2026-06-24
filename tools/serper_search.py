@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 class SerperSearch:
     """
-    Serper search tool for the Global Information Trend Assessment system.
+    Serper search tool for the Information Trend Assessment system.
     Uses the Serper API for web searches.
     """
 

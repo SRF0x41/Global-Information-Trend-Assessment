@@ -1,7 +1,7 @@
-# Global Information Trend Assessment - Project Documentation
+# Information Trend Assessment - Project Documentation
 
 ## Overview
-This is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
+This is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
 
 ## Core Concept: The Living Document
 The system centers around a "Living Document" (`living_document.md`) which acts as the agent's persistent, evolving working memory and state. The agent's goal is to synthesize information into a coherent, evolving model of reality, moving from disconnected facts to structured understanding of the "zeitgeist."

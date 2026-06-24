@@ -7,7 +7,7 @@ import trafilatura
 
 class TextExtractor:
     """
-    Text extraction tool for the Global Information Trend Assessment system.
+    Text extraction tool for the Information Trend Assessment system.
     Extracts relevant text data from URLs using trafilatura and fallback methods.
     """
 

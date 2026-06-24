@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Demonstration of updated GDELT 2.0 DOC API integration for Global Information Trend Assessment
+Demonstration of updated GDELT 2.0 DOC API integration for Information Trend Assessment
 
 This script demonstrates the complete implementation of the GDELT client with:
 1. Proper API endpoint usage for GDELT 2.0 DOC API

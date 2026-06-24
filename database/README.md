@@ -1,6 +1,6 @@
 # Search Database
 
-This directory contains the database implementation for storing search results from the Global Information Trend Assessment system. The database works as a faux search engine, providing flexible search capabilities similar to traditional search engines.
+This directory contains the database implementation for storing search results from the Information Trend Assessment system. The database works as a faux search engine, providing flexible search capabilities similar to traditional search engines.
 
 ## Purpose
 

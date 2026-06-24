@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Overview
-Global Information Trend Assessment (GITA) is an autonomous, agentic research framework that models the evolving global zeitgeist. It identifies patterns, narratives, and tensions across psychological, social, and cultural domains. The system is not a news aggregator — it builds a provisional, revisable model of collective human experience.
+Information Trend Assessment (ITA) is an autonomous, agentic research framework that models the evolving zeitgeist. It identifies patterns, narratives, and tensions across psychological, social, and cultural domains. The system is not a news aggregator — it builds a provisional, revisable model of collective human experience.
 
 The central state is `living_document.md` — the agent's persistent working memory. All operations read from and surgically update this document.
 

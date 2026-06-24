@@ -28,16 +28,6 @@ Do not delete entries from this section. Mark them as [UNVERIFIED], [SUPPORTED],
 
 When a signal in this section gains enough supporting evidence, promote it to the appropriate structured section (Emerging Signals, Active Narratives, etc.).
 
-
-[UNVERIFIED] Hypothesis: The Shift from "Connection" to "Curation" (growing interest in niche communities and personalized "digital gardens" over mass-market social feeds).
-[UNVERIFIED] Hypothesis: The Emergence of "Post-Irony" or "New Sincerity" (visible fatigue with 2010s irony/cynicism appearing in new art and communication styles).
-[UNVERIFIED] Tension: Hyper-Connectivity vs. Radical Isolation (the paradox of global reach vs. profound social atomization).
-[UNVERIFIED] Tension: Algorithative Determinism vs Human Agency (ease of algorithmic curation vs the movement for manual/human-led discovery).
-[UNVERIFIED] Tension: Digital Minimalism vs Algorithmic Dependency (reemergence of analog hobbies vs digital omnipresence).
-[UNVERIFIED] Blind Spot: Demographic Silos (lack of data on non-Western/Global South contexts).
-[UNVERIFIED] Blind Spot: Platform Opacity (behaviors in closed/encrypted ecosystems like Signal, Discord, Telegram).
-[UNVERIFIED] Blind Spot: Generational Lag (uncertainty if Gen Z shifts are universal or demographic outliers).
-
 ---
 
 *No working notes yet. Begin here as you gather initial observations.*
