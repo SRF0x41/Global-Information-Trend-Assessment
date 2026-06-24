@@ -4,6 +4,7 @@ from llm_clients.lm_studio_client import LmStudioClient
 from pathlib import Path
 from agent_reasoning.prompt_builder import PromptBuilder
 from parsers.response_parser import ResponseParser
+from typing import List, Dict, Any
 import json
 
 # Configure logging
@@ -103,6 +104,88 @@ def write_document_test(text, append_prompt: Optional[str] = None):
         # print(target)
         # print(value)
         writer.update(target, value)
+        
+def search_store_analyze(query):
+    from tools.serper_search import SerperSearch
+    serper = SerperSearch()
+
+    # Step1: Generate a list of search results from the first page on Google
+    first_page_articles = serper.search(query)
+
+    # Step2: Read and parse every article in the first page results
+    from tools.text_extractor import TextExtractor
+    page_parser = TextExtractor()
+
+    # Step3: Initialize database for storing results
+    try:
+        from database.search_database import SearchDatabase
+        db = SearchDatabase()
+    except Exception as e:
+        print(f"Warning: Could not initialize database: {e}")
+        db = None
+
+    # Step4: Process each article and store in database
+    for r in first_page_articles:
+        pulled_text = page_parser.extract_text(r.get("url"))
+
+        # Store the result in the database if database is available
+        if db:
+            try:
+                # Store the result in the database
+                title = r.get("title", "")
+                url = r.get("url", "")
+
+                # Attempt to extract date posted from Serper results if available
+                date_posted = r.get("date", None)
+
+                db.store_result(
+                    url=url,
+                    title=title,
+                    content=pulled_text,
+                    search_query=query,
+                    date_posted=date_posted
+                )
+            except Exception as e:
+                print(f"Warning: Could not store result in database: {e}")
+        else:
+            print("Database not available, skipping storage")
+            
+        # Step 5: have the llm take the entire article and gather evidence
+        
+        analyze_prompt = PromptBuilder()
+        analyze_prompt.add_from_file(SYSTEM_PROMPT)
+        
+        EXTRACT_PROMPT = Path("prompts/EXTRACT_PROMPT.md")
+        analyze_prompt.add_from_file(EXTRACT_PROMPT)
+        analyze_prompt.add_text("Here is the following article to analyze.")
+        analyze_prompt.add_text(pulled_text)
+        
+        llm_client.send(analyze_prompt)
+        
+
+
+def database_search(query: str, limit: int = 1) -> List[Dict[str, Any]]:
+    """
+    Search the database for relevant results based on a query.
+    Returns one or more relevant results (not exact matches).
+    """
+    try:
+        from database.search_database import SearchDatabase
+        db = SearchDatabase()
+
+        # Perform flexible search using the database's search capability
+        results = db.search(query, limit=limit)
+
+        return results
+
+    except Exception as e:
+        print(f"Error performing database search: {e}")
+        return []
+            
+            
+        # Step 5: 
+    
+    
 
 def search():
     # Step 1: Generate search queries based on the current living document state
@@ -164,7 +247,7 @@ def search():
             write_document_test(response)
                 
                
-            
+
             
 
 
@@ -198,7 +281,6 @@ def main():
                 write notes and analyses directly to the living document.            
     """
     
-    search()
 
     """
             Extract:
