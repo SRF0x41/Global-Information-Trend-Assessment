@@ -12,6 +12,7 @@ This script demonstrates the complete implementation of the GDELT client with:
 from GDELT_client import GDELTClient
 import time
 
+
 def demonstrate_gdelt_integration():
     """Demonstrate complete GDELT integration with proper delays"""
 
@@ -22,11 +23,7 @@ def demonstrate_gdelt_integration():
     client = GDELTClient()
 
     # Define topics for analysis
-    topics = [
-        "artificial intelligence",
-        "climate change",
-        "global conflicts"
-    ]
+    topics = ["artificial intelligence", "climate change", "global conflicts"]
 
     print(f"\nAnalyzing {len(topics)} topics:")
     for i, topic in enumerate(topics, 1):
@@ -42,9 +39,11 @@ def demonstrate_gdelt_integration():
                 query=topic,
                 maxrecords=50,  # More records for better analysis
                 timespan="1w",  # Last week of coverage
-                sort="HybridRel"
+                sort="HybridRel",
             )
-            print(f"   Found {len(article_results[topic].get('articles', []))} articles")
+            print(
+                f"   Found {len(article_results[topic].get('articles', []))} articles"
+            )
         except Exception as e:
             print(f"   Error: {e}")
 
@@ -55,11 +54,11 @@ def demonstrate_gdelt_integration():
         print(f"   Analyzing trend for '{topic}'...")
         try:
             timeline_results[topic] = client.timeline(
-                query=topic,
-                timespan="1m",  # Last month for trend analysis
-                smooth=5
+                query=topic, timespan="1m", smooth=5  # Last month for trend analysis
             )
-            print(f"   Timeline with {len(timeline_results[topic].get('timeline', []))} data points")
+            print(
+                f"   Timeline with {len(timeline_results[topic].get('timeline', []))} data points"
+            )
         except Exception as e:
             print(f"   Error: {e}")
 
@@ -89,6 +88,7 @@ def demonstrate_gdelt_integration():
     print("   - Time window filtering (timespan, startdatetime, enddatetime)")
     print("   - Configurable max records and sorting options")
     print("   - Integration-ready patterns for agent system")
+
 
 if __name__ == "__main__":
     demonstrate_gdelt_integration()

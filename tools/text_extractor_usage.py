@@ -7,6 +7,7 @@ This file demonstrates various ways to use the TextExtractor class.
 import os
 from tools.text_extractor import TextExtractor
 
+
 def main():
     # Initialize the text extractor
     extractor = TextExtractor()
@@ -40,7 +41,7 @@ def main():
     urls = [
         "https://en.wikipedia.org/wiki/Machine_learning",
         "https://en.wikipedia.org/wiki/Deep_learning",
-        "https://en.wikipedia.org/wiki/Natural_language_processing"
+        "https://en.wikipedia.org/wiki/Natural_language_processing",
     ]
 
     try:
@@ -58,6 +59,7 @@ def main():
         print(f"Content from invalid URL: {content}")
     except Exception as e:
         print(f"Error with invalid URL: {e}")
+
 
 if __name__ == "__main__":
     main()

@@ -3,6 +3,7 @@ from tools.web_searcher import WebSearcher
 from tools.document_write import DocumentWrite
 from llm_clients.lm_studio_client import LmStudioClient
 
+
 def test_system_components_instantiation():
     # This test verifies that all major components can be instantiated
     # (using dummy paths/URLs) without immediate errors.
@@ -18,6 +19,7 @@ def test_system_components_instantiation():
         # We'll skip actual file creation here to avoid cluttering the environment
         # but verify it raises FileNotFoundError if file doesn't exist.
         from unittest.mock import patch
+
         with patch("os.path.exists", return_value=True):
             with patch("builtins.open", create=True):
                 dw = DocumentWrite("dummy.md")

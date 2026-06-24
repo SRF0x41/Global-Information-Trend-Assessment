@@ -26,7 +26,7 @@ class SearchDatabase:
         cursor = conn.cursor()
 
         # Create table for search results
-        cursor.execute('''
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS search_results (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 url TEXT UNIQUE NOT NULL,
@@ -38,29 +38,42 @@ class SearchDatabase:
                 source_domain TEXT,
                 date_posted TEXT
             )
-        ''')
+        """)
 
         # Create table for search queries
-        cursor.execute('''
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS search_queries (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 query_text TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 result_count INTEGER
             )
-        ''')
+        """)
 
         # Create indexes for better performance
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_title ON search_results(title)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_content ON search_results(content)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_url ON search_results(url)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_search_query ON search_results(search_query)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_timestamp ON search_results(timestamp)')
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_title ON search_results(title)")
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS idx_content ON search_results(content)"
+        )
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_url ON search_results(url)")
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS idx_search_query ON search_results(search_query)"
+        )
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS idx_timestamp ON search_results(timestamp)"
+        )
 
         conn.commit()
         conn.close()
 
-    def store_result(self, url: str, title: str, content: str, search_query: str = None, date_posted: str = None) -> bool:
+    def store_result(
+        self,
+        url: str,
+        title: str,
+        content: str,
+        search_query: str = None,
+        date_posted: str = None,
+    ) -> bool:
         """
         Store a search result in the database.
         """
@@ -75,11 +88,14 @@ class SearchDatabase:
             word_count = len(content.split())
 
             # Insert or update the result
-            cursor.execute('''
+            cursor.execute(
+                """
                 INSERT OR REPLACE INTO search_results
                 (url, title, content, search_query, word_count, source_domain, date_posted)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (url, title, content, search_query, word_count, domain, date_posted))
+            """,
+                (url, title, content, search_query, word_count, domain, date_posted),
+            )
 
             conn.commit()
             conn.close()
@@ -99,11 +115,11 @@ class SearchDatabase:
             cursor = conn.cursor()
 
             for result in results:
-                url = result.get('url', '')
-                title = result.get('title', '')
-                content = result.get('content', '')
-                search_query = result.get('search_query', '')
-                date_posted = result.get('date_posted', None)
+                url = result.get("url", "")
+                title = result.get("title", "")
+                content = result.get("content", "")
+                search_query = result.get("search_query", "")
+                date_posted = result.get("date_posted", None)
 
                 # Extract domain from URL
                 domain = self._extract_domain(url)
@@ -111,11 +127,22 @@ class SearchDatabase:
                 # Calculate word count
                 word_count = len(content.split())
 
-                cursor.execute('''
+                cursor.execute(
+                    """
                     INSERT OR REPLACE INTO search_results
                     (url, title, content, search_query, word_count, source_domain, date_posted)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                ''', (url, title, content, search_query, word_count, domain, date_posted))
+                """,
+                    (
+                        url,
+                        title,
+                        content,
+                        search_query,
+                        word_count,
+                        domain,
+                        date_posted,
+                    ),
+                )
 
                 stored_count += 1
 
@@ -127,7 +154,9 @@ class SearchDatabase:
             print(f"Error storing batch results: {e}")
             return stored_count
 
-    def search(self, query: str, limit: int = 20, min_relevance: float = 0.0) -> List[Dict[str, Any]]:
+    def search(
+        self, query: str, limit: int = 20, min_relevance: float = 0.0
+    ) -> List[Dict[str, Any]]:
         """
         Search through stored content with flexible matching (like a search engine).
         Returns results sorted by relevance.
@@ -143,7 +172,8 @@ class SearchDatabase:
             # Build a flexible search query that matches content, title, or URL
             if len(search_terms) == 1:
                 # Single term search - look in title, content, and URL
-                cursor.execute('''
+                cursor.execute(
+                    """
                     SELECT *,
                            (CASE WHEN title LIKE ? THEN 10 ELSE 0 END +
                             CASE WHEN content LIKE ? THEN 5 ELSE 0 END +
@@ -152,21 +182,36 @@ class SearchDatabase:
                     WHERE title LIKE ? OR content LIKE ? OR url LIKE ?
                     ORDER BY relevance_score DESC, timestamp DESC
                     LIMIT ?
-                ''', (f'%{search_terms[0]}%', f'%{search_terms[0]}%', f'%{search_terms[0]}%',
-                      f'%{search_terms[0]}%', f'%{search_terms[0]}%', f'%{search_terms[0]}%', limit))
+                """,
+                    (
+                        f"%{search_terms[0]}%",
+                        f"%{search_terms[0]}%",
+                        f"%{search_terms[0]}%",
+                        f"%{search_terms[0]}%",
+                        f"%{search_terms[0]}%",
+                        f"%{search_terms[0]}%",
+                        limit,
+                    ),
+                )
             else:
                 # Multi-term search - look for any of the terms
-                placeholders = ', '.join(['?' for _ in search_terms])
-                search_conditions = ' OR '.join(['title LIKE ? OR content LIKE ? OR url LIKE ?' for _ in search_terms])
+                placeholders = ", ".join(["?" for _ in search_terms])
+                search_conditions = " OR ".join(
+                    [
+                        "title LIKE ? OR content LIKE ? OR url LIKE ?"
+                        for _ in search_terms
+                    ]
+                )
 
                 # Prepare all parameters
                 params = []
                 for term in search_terms:
-                    params.extend([f'%{term}%', f'%{term}%', f'%{term}%'])
+                    params.extend([f"%{term}%", f"%{term}%", f"%{term}%"])
 
                 params.append(limit)
 
-                cursor.execute(f'''
+                cursor.execute(
+                    f"""
                     SELECT *,
                            (CASE WHEN title LIKE ? THEN 10 ELSE 0 END +
                             CASE WHEN content LIKE ? THEN 5 ELSE 0 END +
@@ -175,7 +220,9 @@ class SearchDatabase:
                     WHERE {search_conditions}
                     ORDER BY relevance_score DESC, timestamp DESC
                     LIMIT ?
-                ''', params)
+                """,
+                    params,
+                )
 
             rows = cursor.fetchall()
             conn.close()
@@ -185,8 +232,8 @@ class SearchDatabase:
             for row in rows:
                 result = dict(row)
                 # Remove the internal relevance_score field from display
-                if 'relevance_score' in result:
-                    del result['relevance_score']
+                if "relevance_score" in result:
+                    del result["relevance_score"]
                 results.append(result)
 
             return results
@@ -204,9 +251,12 @@ class SearchDatabase:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
 
-            cursor.execute('''
+            cursor.execute(
+                """
                 SELECT * FROM search_results WHERE url = ?
-            ''', (url,))
+            """,
+                (url,),
+            )
 
             row = cursor.fetchone()
             conn.close()
@@ -228,11 +278,14 @@ class SearchDatabase:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
 
-            cursor.execute('''
+            cursor.execute(
+                """
                 SELECT * FROM search_results
                 ORDER BY timestamp DESC
                 LIMIT ?
-            ''', (limit,))
+            """,
+                (limit,),
+            )
 
             rows = cursor.fetchall()
             conn.close()
@@ -252,12 +305,15 @@ class SearchDatabase:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
 
-            cursor.execute('''
+            cursor.execute(
+                """
                 SELECT * FROM search_results
                 WHERE search_query LIKE ?
                 ORDER BY timestamp DESC
                 LIMIT ?
-            ''', (f'%{query}%', limit))
+            """,
+                (f"%{query}%", limit),
+            )
 
             rows = cursor.fetchall()
             conn.close()
@@ -277,15 +333,17 @@ class SearchDatabase:
             cursor = conn.cursor()
 
             # Count total results
-            cursor.execute('SELECT COUNT(*) as total FROM search_results')
+            cursor.execute("SELECT COUNT(*) as total FROM search_results")
             total = cursor.fetchone()[0]
 
             # Count unique domains
-            cursor.execute('SELECT COUNT(DISTINCT source_domain) as domains FROM search_results')
+            cursor.execute(
+                "SELECT COUNT(DISTINCT source_domain) as domains FROM search_results"
+            )
             domains = cursor.fetchone()[0]
 
             # Get latest timestamp
-            cursor.execute('SELECT MAX(timestamp) as latest FROM search_results')
+            cursor.execute("SELECT MAX(timestamp) as latest FROM search_results")
             latest = cursor.fetchone()[0]
 
             conn.close()
@@ -293,7 +351,7 @@ class SearchDatabase:
             return {
                 "total_results": total,
                 "unique_domains": domains,
-                "latest_timestamp": latest
+                "latest_timestamp": latest,
             }
 
         except Exception as e:
@@ -306,6 +364,7 @@ class SearchDatabase:
         """
         try:
             from urllib.parse import urlparse
+
             parsed_url = urlparse(url)
             return parsed_url.netloc
         except:
@@ -319,7 +378,7 @@ class SearchDatabase:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
 
-            cursor.execute('DELETE FROM search_results WHERE url = ?', (url,))
+            cursor.execute("DELETE FROM search_results WHERE url = ?", (url,))
             deleted = cursor.rowcount > 0
 
             conn.commit()
@@ -338,8 +397,8 @@ class SearchDatabase:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
 
-            cursor.execute('DELETE FROM search_results')
-            cursor.execute('DELETE FROM search_queries')
+            cursor.execute("DELETE FROM search_results")
+            cursor.execute("DELETE FROM search_queries")
 
             conn.commit()
             conn.close()

@@ -14,6 +14,7 @@ from database.search_database import SearchDatabase
 from tools.serper_search import SerperSearch
 from tools.text_extractor import TextExtractor
 
+
 def demonstrate_workflow():
     """Demonstrate the complete workflow."""
 
@@ -36,7 +37,9 @@ def demonstrate_workflow():
         print(f"Found {len(search_results)} results for '{query}'")
 
         if not search_results:
-            print("No results found - this might be due to API limitations or no results")
+            print(
+                "No results found - this might be due to API limitations or no results"
+            )
             return
 
         # Step 2: Extract text content from the first few results
@@ -56,7 +59,7 @@ def demonstrate_workflow():
                     "title": result["title"],
                     "content": content,
                     "search_query": query,
-                    "date_posted": None  # Would be extracted from the source if available
+                    "date_posted": None,  # Would be extracted from the source if available
                 }
 
                 extracted_results.append(extracted_result)
@@ -103,6 +106,7 @@ def demonstrate_workflow():
 
         for result in results[:1]:  # Show first result
             print(f"  - {result['title'][:60]}...")
+
 
 if __name__ == "__main__":
     demonstrate_workflow()

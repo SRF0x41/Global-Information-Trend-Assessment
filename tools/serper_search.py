@@ -49,13 +49,13 @@ class SerperSearch:
         # Handle organic search results - only extract from the "organic" list
         if "organic" in data:
             for result in data["organic"]:
-                results.append({
-                    "title": result.get("title", ""),
-                    "url": result.get("link", ""),
-                    "snippet": result.get("snippet", ""),
-                    "date": result.get("date","")
-                })
+                results.append(
+                    {
+                        "title": result.get("title", ""),
+                        "url": result.get("link", ""),
+                        "snippet": result.get("snippet", ""),
+                        "date": result.get("date", ""),
+                    }
+                )
 
         return results
-
-   

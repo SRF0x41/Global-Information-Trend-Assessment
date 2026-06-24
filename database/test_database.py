@@ -14,6 +14,7 @@ from database.search_database import SearchDatabase
 from tools.serper_search import SerperSearch
 from tools.text_extractor import TextExtractor
 
+
 def test_database():
     """Test the database functionality."""
 
@@ -33,14 +34,14 @@ def test_database():
         "title": "Example Article About AI",
         "content": "Artificial intelligence is transforming many industries. Machine learning algorithms are being used to solve complex problems in healthcare, finance, and transportation.",
         "search_query": "artificial intelligence applications",
-        "date_posted": "2026-06-23"
+        "date_posted": "2026-06-23",
     }
 
     success = db.store_result(
         url=test_result["url"],
         title=test_result["title"],
         content=test_result["content"],
-        search_query=test_result["search_query"]
+        search_query=test_result["search_query"],
     )
 
     print(f"Stored test result: {success}")
@@ -68,6 +69,7 @@ def test_database():
     # Test statistics after adding data
     stats = db.get_statistics()
     print(f"\nStatistics after adding data: {stats}")
+
 
 if __name__ == "__main__":
     test_database()

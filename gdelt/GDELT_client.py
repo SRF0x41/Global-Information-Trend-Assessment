@@ -40,7 +40,7 @@ class GDELTClient:
         enddatetime: str = None,
         maxrecords: int = 75,
         sort: str = "HybridRel",
-        format: str = "json"
+        format: str = "json",
     ):
         """
         Article search using artlist mode.
@@ -55,7 +55,7 @@ class GDELTClient:
             "mode": "artlist",
             "format": format,
             "sort": sort,
-            "maxrecords": maxrecords
+            "maxrecords": maxrecords,
         }
 
         # Time window mode (offset-based)
@@ -73,12 +73,7 @@ class GDELTClient:
     # -----------------------------
     # Timeline (trend analysis)
     # -----------------------------
-    def timeline(
-        self,
-        query: str,
-        timespan: str = "1d",
-        smooth: int = 5
-    ):
+    def timeline(self, query: str, timespan: str = "1d", smooth: int = 5):
         """
         Volume timeline of coverage.
 
@@ -90,7 +85,7 @@ class GDELTClient:
             "mode": "timelinevol",
             "timespan": timespan,
             "TIMELINESMOOTH": smooth,
-            "format": "json"
+            "format": "json",
         }
 
         return self._get(params)
@@ -103,7 +98,7 @@ class GDELTClient:
         query: str,
         timespan: str = "1w",
         mode: str = "imagegallery",
-        maxrecords: int = 50
+        maxrecords: int = 50,
     ):
         """
         Visual news narrative (image-based zeitgeist signals)
@@ -114,7 +109,7 @@ class GDELTClient:
             "mode": mode,
             "timespan": timespan,
             "format": "json",
-            "maxrecords": maxrecords
+            "maxrecords": maxrecords,
         }
 
         return self._get(params)
@@ -132,7 +127,7 @@ class GDELTClient:
         for topic in topics:
             results[topic] = {
                 "articles": self.search_articles(topic),
-                "trend": self.timeline(topic, timespan="1d")
+                "trend": self.timeline(topic, timespan="1d"),
             }
 
         return results

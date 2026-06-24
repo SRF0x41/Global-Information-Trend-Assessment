@@ -1,10 +1,13 @@
 import pytest
 import json
 
+
 @pytest.fixture
 def parser():
     from parsers.response_parser import ResponseParser
+
     return ResponseParser()
+
 
 @pytest.fixture
 def mock_llm_response():
@@ -12,7 +15,7 @@ def mock_llm_response():
         "choices": [
             {
                 "message": {
-                    "content": "<tool_call>{\"name\": \"search\", \"arguments\": {\"q\": \"weather\"}}</tool_call>"
+                    "content": '<tool_call>{"name": "search", "arguments": {"q": "weather"}}</tool_call>'
                 }
             }
         ]

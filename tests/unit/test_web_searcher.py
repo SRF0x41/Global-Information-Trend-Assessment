@@ -3,9 +3,11 @@ import requests
 from unittest.mock import MagicMock, patch
 from tools.web_searcher import WebSearcher
 
+
 @pytest.fixture
 def searcher():
     return WebSearcher()
+
 
 @pytest.fixture
 def mock_requests(mocker):
@@ -13,6 +15,7 @@ def mock_requests(mocker):
         "get": mocker.patch("requests.Session.get"),
         "post": mocker.patch("requests.post"),
     }
+
 
 def test_clean_url(searcher):
     # Normal URL
@@ -25,6 +28,7 @@ def test_clean_url(searcher):
     # DDG Redirect URL
     ddg_url = "https://duckduckgo.com/l.js?uddg=https://example.com/real"
     assert searcher.clean_url(ddg_url) == "https://example.com/real"
+
 
 def test_search_success(searcher, mock_requests):
     # Mock HTML response
@@ -54,11 +58,15 @@ def test_search_success(searcher, mock_requests):
     assert results[1]["url"] == "https://example.com/2"
     assert results[1]["snippet"] == "Snippet 2"
 
+
 def test_search_error(searcher, mock_requests):
-    mock_requests["get"].side_effect = requests.exceptions.ConnectionError("No internet")
+    mock_requests["get"].side_effect = requests.exceptions.ConnectionError(
+        "No internet"
+    )
 
     with pytest.raises(RuntimeError, match="Search request failed"):
         searcher.search("query")
+
 
 def test_fetch_page_success(searcher, mock_requests):
     # Mock response with trafilatura not installed or failing
@@ -73,14 +81,17 @@ def test_fetch_page_success(searcher, mock_requests):
         assert "Title" in content
         assert "Content here" in content
 
+
 def test_fetch_page_error(searcher, mock_requests):
     mock_requests["get"].side_effect = Exception("Failed to connect")
 
     content = searcher.fetch_page("https://example.com")
     assert "[ERROR fetching page" in content
 
+
 def test_fetch_page_invalid_url(searcher):
     assert "[SKIPPED invalid URL]" == searcher.fetch_page("not-a-url")
+
 
 def test_search_and_read(searcher, mock_requests):
     # Mock search results
@@ -91,7 +102,7 @@ def test_search_and_read(searcher, mock_requests):
     # First call for search, second for fetch
     mock_requests["get"].side_effect = [
         MagicMock(text=mock_search_html, status_code=200),
-        MagicMock(text=mock_page_html, status_code=200)
+        MagicMock(text=mock_page_html, status_code=200),
     ]
 
     with patch("trafilatura.extract", return_value=None):
@@ -101,10 +112,13 @@ def test_search_and_read(searcher, mock_requests):
     assert results[0]["title"] == "Title 1"
     assert "Content 1" in results[0]["content"]
 
+
 def test_search_detailed(searcher, mock_requests):
     # Mock search results
     mock_search_html = '<a class="result__a" href="https://example.com/1">Title 1</a>'
-    mock_requests["get"].return_value = MagicMock(text=mock_search_html, status_code=200)
+    mock_requests["get"].return_value = MagicMock(
+        text=mock_search_html, status_code=200
+    )
 
     result = searcher.search_detailed("query")
 

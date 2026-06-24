@@ -2,12 +2,14 @@ import pytest
 import os
 from agent_reasoning.prompt_builder import PromptBuilder
 
+
 def test_prompt_builder_add_text():
     builder = PromptBuilder(max_tokens=100)
     builder.add_text("Hello")
     builder.add_text("World")
     assert builder.get_prompt() == "Hello\n\nWorld"
     assert builder.get_total_tokens() > 0
+
 
 def test_prompt_builder_add_from_file(tmp_path):
     file = tmp_path / "test_file.txt"
@@ -19,6 +21,7 @@ def test_prompt_builder_add_from_file(tmp_path):
     assert "Hello from file" in builder.get_prompt()
     assert builder.get_total_tokens() > 0
 
+
 def test_prompt_builder_truncation():
     # Use a small max_tokens to force truncation
     builder = PromptBuilder(max_tokens=5)
@@ -28,7 +31,8 @@ def test_prompt_builder_truncation():
     assert len(prompt) <= 50  # It's characters, but tokens are what matters.
     # Actually, tiktoken tokens are different.
     # But it should be significantly shorter.
-    assert len(prompt.encode('utf-8')) < 50
+    assert len(prompt.encode("utf-8")) < 50
+
 
 def test_prompt_builder_remove_source(tmp_path):
     file1 = tmp_path / "f1.txt"
@@ -47,6 +51,7 @@ def test_prompt_builder_remove_source(tmp_path):
 
     assert "Content 1" not in builder.get_prompt()
     assert "Content 2" in builder.get_prompt()
+
 
 def test_prompt_builder_file_not_found():
     builder = PromptBuilder()

@@ -3,9 +3,11 @@ import requests
 from unittest.mock import MagicMock, patch
 from llm_clients.lm_studio_client import LmStudioClient
 
+
 @pytest.fixture
 def client():
     return LmStudioClient(base_url="http://test-api/v1", api_key="test-key")
+
 
 def test_send_malformed_json(client, monkeypatch):
     mock_response = MagicMock()
@@ -17,6 +19,7 @@ def test_send_malformed_json(client, monkeypatch):
     response = client.send(system="You are a helpful assistant", user="Hi")
     assert response is None
 
+
 def test_send_empty_choices(client, monkeypatch):
     mock_response = MagicMock()
     mock_response.status_code = 200
@@ -27,8 +30,11 @@ def test_send_empty_choices(client, monkeypatch):
     response = client.send(system="You are a helpful assistant", user="Hi")
     assert response is None
 
+
 def test_send_timeout(client, monkeypatch):
-    monkeypatch.setattr("requests.post", MagicMock(side_effect=requests.exceptions.Timeout))
+    monkeypatch.setattr(
+        "requests.post", MagicMock(side_effect=requests.exceptions.Timeout)
+    )
 
     response = client.send(system="You are a helpful assistant", user="Hi")
     assert response is None

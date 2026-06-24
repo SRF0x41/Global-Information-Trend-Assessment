@@ -3,12 +3,14 @@ from typing import List, Dict, Any
 from parsers.response_parser import ResponseParser
 from parsers.tool import Tool
 
+
 def test_tool_initialization():
     tool_data = {"name": "test_tool", "arguments": {"key": "value"}}
     tool = Tool(tool_data)
     assert tool.get_name() == "test_tool"
     assert tool.get_tool_arguments() == {"key": "value"}
     assert tool.get_raw_json() == tool_data
+
 
 def test_response_parser_extract_tool_calls():
     parser = ResponseParser()
@@ -31,11 +33,13 @@ def test_response_parser_extract_tool_calls():
     assert tool_calls[1].get_name() == "search"
     assert tool_calls[1].get_tool_arguments() == {"query": "weather in London"}
 
+
 def test_response_parser_invalid_json():
     parser = ResponseParser()
     text = "<tool_call>invalid json</tool_call>"
     tool_calls = parser.extract_tool_calls(text)
     assert len(tool_calls) == 0
+
 
 def test_response_parser_mixed_content():
     parser = ResponseParser()

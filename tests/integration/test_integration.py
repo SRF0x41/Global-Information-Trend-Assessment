@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 from llm_clients.lm_studio_client import LmStudioClient
 from parsers.response_parser import ResponseParser
 
+
 def test_full_flow_mocked(parser, mock_llm_response):
     # This simulates a piece of the agent loop:
     # 1. Get response from LLM (mocked)

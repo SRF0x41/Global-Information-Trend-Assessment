@@ -6,6 +6,7 @@ Simple test to verify GDELT client functionality
 from gdelt.GDELT_client import GDELTClient
 import time
 
+
 def test_basic_functionality():
     """Test basic GDELT client functionality"""
     print("Testing GDELT Client...")
@@ -16,9 +17,7 @@ def test_basic_functionality():
     print("\n1. Testing basic article search...")
     try:
         result = client.search_articles(
-            query="artificial intelligence",
-            maxrecords=5,
-            timespan="1d"
+            query="artificial intelligence", maxrecords=5, timespan="1d"
         )
         print("✓ Article search successful")
         print(f"  Found {len(result.get('articles', []))} articles")
@@ -29,9 +28,7 @@ def test_basic_functionality():
     print("\n2. Testing timeline analysis...")
     try:
         result = client.timeline(
-            query="artificial intelligence",
-            timespan="1w",
-            smooth=3
+            query="artificial intelligence", timespan="1w", smooth=3
         )
         print("✓ Timeline analysis successful")
         print(f"  Timeline data contains {len(result.get('timeline', []))} time points")
@@ -45,10 +42,10 @@ def test_basic_functionality():
             query="artificial intelligence",
             timespan="1w",
             mode="imagegallery",
-            maxrecords=5
+            maxrecords=5,
         )
         print("✓ Image gallery successful")
-        if 'images' in result:
+        if "images" in result:
             print(f"  Found {len(result['images'])} images")
         else:
             print("  No images found (expected for some queries)")
@@ -56,6 +53,7 @@ def test_basic_functionality():
         print(f"✗ Image gallery failed: {e}")
 
     print("\n✅ All tests completed!")
+
 
 if __name__ == "__main__":
     test_basic_functionality()

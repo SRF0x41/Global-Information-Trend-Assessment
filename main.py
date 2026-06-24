@@ -70,14 +70,11 @@ def write_document_test(text, append_prompt: Optional[str] = None):
 
 Your job is to update the Living Document so that it incorporates the insights found in the notes."""
     )
-    write_prompt.add_text(
-        """
+    write_prompt.add_text("""
 ## NOTES
-"""
-    )
+""")
     write_prompt.add_text(text)
-    write_prompt.add_text(
-        """
+    write_prompt.add_text("""
 ## INSTRUCTION
 Read the notes carefully. For every meaningful signal, observation, or piece of evidence they contain, use the `write` tool to surgically update the Living Document.
 
@@ -87,8 +84,7 @@ Read the notes carefully. For every meaningful signal, observation, or piece of 
 - Do NOT skip notes. Every note must be reflected in the document.
 - Do NOT rewrite unchanged sections — only touch what the notes address.
 
-Below is the current Living Document."""
-    )
+Below is the current Living Document.""")
     write_prompt.add_from_file(LIVING_DOCUMENT)
     write_prompt.add_text(
         "Below is the tool schema that shows you how to call `write`."

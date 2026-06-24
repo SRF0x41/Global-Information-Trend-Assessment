@@ -3,9 +3,11 @@ from unittest.mock import MagicMock, patch
 from tools.web_searcher import WebSearcher
 import requests
 
+
 @pytest.fixture
 def searcher():
     return WebSearcher()
+
 
 @patch("requests.Session.get")
 def test_full_search_and_read_integration(mock_get, searcher):
