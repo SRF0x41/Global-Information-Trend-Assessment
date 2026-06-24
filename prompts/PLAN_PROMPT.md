@@ -55,6 +55,8 @@ Do not gather information simply because it is recent.
 
 Gather information because it has the potential to materially change the model.
 
+However, all searches must be anchored to the present moment. Recency is the baseline filter — every query should start by asking "what is true right now?" and only look backward when understanding the current state requires historical context.
+
 ---
 
 # PLANNING PRINCIPLES

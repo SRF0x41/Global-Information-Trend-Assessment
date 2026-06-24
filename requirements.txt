@@ -6,6 +6,7 @@ charset-normalizer==3.4.7
 click==8.4.1
 courlan==1.4.0
 dateparser==1.4.1
+dotenv==0.9.9
 feedparser==6.0.12
 htmldate==1.10.0
 idna==3.18
@@ -24,6 +25,7 @@ Pygments==2.20.0
 pytest==9.1.1
 pytest-mock==3.14.0
 python-dateutil==2.9.0.post0
+python-dotenv==1.2.2
 pytokens==0.4.1
 pytz==2026.2
 PyYAML==6.0.3

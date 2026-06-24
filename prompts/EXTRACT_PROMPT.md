@@ -123,6 +123,87 @@ These tensions are often highly informative signals.
 
 ---
 
+# RELEVANCE FILTERING
+
+The objective is not to capture everything contained in a source.
+
+The objective is to capture information that improves understanding of the current human condition and cultural moment.
+
+Before extracting a signal, ask:
+
+* Does this reveal something about how people think, feel, behave, relate, organize, create meaning, construct identity, or adapt to changing conditions?
+* Does this indicate a recurring pattern, emerging tendency, social tension, value shift, behavioral change, or cultural development?
+* Would this observation help a future researcher better understand the present moment?
+
+If the answer is no, do not extract it.
+
+---
+
+## INCLUDE
+
+Prioritize information that reveals:
+
+* motivations
+* fears
+* aspirations
+* frustrations
+* uncertainty
+* adaptation
+* decision-making
+* social behavior
+* community dynamics
+* identity construction
+* meaning-making
+* cultural narratives
+* changing norms
+* evolving values
+* behavioral patterns
+* recurring tensions
+* contradictions between beliefs and actions
+
+---
+
+## EXCLUDE
+
+Do not extract information solely because it is:
+
+* novel
+* surprising
+* controversial
+* politically salient
+* statistically significant
+* emotionally dramatic
+
+Exclude information that does not contribute to understanding broader human patterns, including:
+
+* isolated events with no behavioral relevance
+* procedural details
+* administrative information
+* technical implementation details
+* operational logistics
+* one-off anecdotes lacking broader significance
+* numerical data without human implications
+* factual background that does not reveal behavior or culture
+* article-specific details that do not generalize beyond the immediate event
+
+---
+
+## SIGNAL DENSITY
+
+Prefer a small number of meaningful signals over a large number of weak observations.
+
+Do not extract every possible observation.
+
+Extract only those observations that appear genuinely informative about human behavior, social dynamics, culture, identity, meaning, or adaptation.
+
+The extraction layer should increase signal-to-noise ratio.
+
+When uncertain, favor omission over inclusion.
+
+A missed weak signal is preferable to a cluttered extraction filled with low-relevance observations.
+
+---
+
 # DISCOVERY OVER CONFIRMATION
 
 Do not search for predefined concepts such as:

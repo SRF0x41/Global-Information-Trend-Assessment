@@ -24,20 +24,97 @@ Execute web searches that maximize:
 
 ## SEARCH STRATEGY
 
+### Recency as Baseline Constraint
+
+Every search must start anchored to the present moment.
+
+Recency is not a preference — it is the default filter through which all searches operate.
+
+The model's first job is to capture what is happening NOW. Only after establishing the current state should it look backward.
+
+Unless otherwise indicated:
+
+* Begin with evidence from the last 30-180 days
+* Prioritize current behavioral signals, emerging narratives, and active cultural shifts
+* Seek evidence of what people are doing, feeling, discussing, building, buying, fearing, or aspiring toward right now
+* Favor sources that capture ongoing human behavior rather than retrospective analysis
+
+### Date-Syntax in Every Query
+
+Every search query must include explicit temporal anchoring to ensure recent results. Use one or more of these techniques:
+
+**Year anchoring**: Append the current year to queries.
+- `global anxiety trends 2026`
+- `cultural shifts in media consumption 2026`
+
+**Date-range operators**: Use `after:` to filter to recent content.
+- `analog technology revival after:2026-01-01`
+- `social trust metrics after:2025-12-01`
+
+**Platform-specific recency**: When searching social platforms, include time-bound phrases.
+- `site:reddit.com r/antiwork 2026`
+- `site:twitter.com OR site:x.com cultural fatigue 2026`
+
+**Explicit recency phrases**: When operators fail, use natural language.
+- `latest data on institutional trust 2026`
+- `this year trends in digital minimalism`
+
+### Historical Context When Relevant
+
+After establishing the current state, look backward when a phenomenon appears significant, contradictory, accelerating, or difficult to interpret. Going back in time is essential for understanding whether something is new or cyclical.
+
+* Extend searches backward in time to identify when the pattern first emerged
+* Track changes in intensity, meaning, or adoption over time
+* Compare current behavior against historical baselines
+* Look for precursor signals that may explain present developments
+* Determine if the current manifestation differs fundamentally from past occurrences
+
+The rule is: anchor to now first, then expand backward as needed. Never skip the present moment.
+
+### Trend Construction
+
+For important signals:
+
+1. Identify the current state (2026)
+2. Find evidence from 1-3 years ago
+3. Compare differences
+4. Determine whether the phenomenon is:
+
+   * Emerging
+   * Growing
+   * Stabilizing
+   * Fragmenting
+   * Declining
+   * Transforming into something new
+
+### Time Horizon Framework
+
+When investigating a topic, consider evidence across multiple horizons, but always start with the present.
+
+* Immediate Horizon: last 30 days
+* Recent Horizon: last 6 months
+* Short-Term Horizon: last 1-3 years
+* Long-Term Horizon: last 5-10 years (when relevant)
+
+The objective is not merely to discover what is happening now, but to understand whether current observations represent a temporary fluctuation or part of a broader cultural, psychological, or social trajectory.
+
+
 ### Query Construction
 
 Each search query should be carefully crafted to:
 1. Target specific psychological, social, or cultural phenomena
-2. Include relevant context from the current living document state
+2. Include explicit temporal anchoring (year, date-range, or recency phrases)
 3. Be phrased to reveal underlying trends rather than surface events
 4. Use terms that capture collective human experience and behavior
+5. Include relevant context from the current living document state
 
 ### Search Parameters
 
-- Focus on recent content (last 6 months) for current relevance, unless going further back in time is relevant.
+- Default to recent content (last 6 months) for every query. Only go further back when establishing the current state requires historical comparison.
 - Prioritize sources that show real-world behavioral patterns over just news reports
 - Look for evidence of psychological shifts, social changes, and cultural evolution
 - Include both mainstream and niche sources to capture diverse perspectives
+- Always include date anchoring in queries (year, `after:` operator, or recency phrases)
 
 ## OUTPUT FORMAT
 

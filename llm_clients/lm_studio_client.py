@@ -48,8 +48,8 @@ class LmStudioClient:
 
     def send(
         self,
-        system: Optional[str],
         user: str,
+        system: Optional[str] = None,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,

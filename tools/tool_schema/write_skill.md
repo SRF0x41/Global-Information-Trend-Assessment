@@ -38,12 +38,14 @@ Use `write` when:
 - Avoid duplication
 - Do not modify unintended sections
 
+### APPEND NEW CONTENT (append mode)
 
-### APPENDING NEW INFORMATION
-If you need to append new information to the living document, do not unclude a target argument.
+Use this when adding new content to the document.
 
+### IMPORTANT:
+Appending is done by omitting target. There is no separate append tool.
 
-### APPEND TOOL CALL FORMAT
+### APPENDING INFORMATION
 <tool_call>
 {
   "name": "write",
