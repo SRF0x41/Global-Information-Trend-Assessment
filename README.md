@@ -1,120 +1,130 @@
-# Global Information Trend Assessment
+# Global Information Trend Assessment (GITA)
 
-Global Information Trend Assessment is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. Rather than merely summarizing news, the system identifies patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) to build a multidimensional model of the current moment.
+An autonomous, agentic research framework designed to model the evolving global zeitgeist. Rather than summarizing news, the system identifies patterns, narratives, and tensions across psychological, social, and cultural domains to build a multidimensional model of the present moment.
 
 ## Core Concept: The Living Document
 
-At the heart of the system is the **Living Document** (`living_document.md`). This document serves as the agent's persistent, evolving working memory and state. 
+At the heart of the system is the **Living Document** (`living_document.md`). This document serves as the agent's persistent, evolving working memory. The agent does not collect articles — it synthesizes information into a coherent, provisional model of reality, continuously revising itself as new evidence arrives.
 
-The agent's goal is not to collect a list of news articles, but to **synthesize** information into a coherent, evolving model of reality. It moves from a collection of disconnected facts to a structured understanding of the "zeitgeist."
+The analytical lens operates through three interconnected layers:
+
+| Layer | Focus Areas |
+| :--- | :--- |
+| **Psychological** | Emotional patterns, motivations, fears, desires, identity construction, meaning-making, attention, cognition |
+| **Social** | Collective behavior, group formation, trust systems, social norms, institutions, belonging, status |
+| **Cultural** | Narratives, symbols, aesthetics, rituals, media ecosystems, language shifts, humor, collective myths |
 
 ## Agentic Workflow
 
-The system operates through a continuous, iterative loop of specialized agentic tasks:
+The system operates through a continuous, iterative loop:
 
-1.  **Planning:** Formulates research strategies and identifies information gaps based on the current state of the `living_document.md`.
-2.  **Search:** Executes targeted web searches to gather external signals.
-3.  **Extraction:** Processes information to identify "signals"—patterns, themes, or tensions—rather than mere summaries.
-4.  **Comparison:** Evaluates new signals to see if they support, weaken, or contradict existing narratives in the document.
-5.  **Refactoring:** Continuously refines the `living_document.md` to improve human readability, coherence, and depth of understanding.
-6.  **Assessment:** Determines if the current model is robust or requires further investigation.
-
-## Analytical Framework
-
-The system evaluates signals across six key dimensions to ensure a holistic perspective:
-
-| Domain | Focus Areas |
-| :--- | :--- |
-| **Cultural** | Changes in values, identity, art, media, behavior, and cultural norms. |
-| **Technological** | New technologies, adoption patterns, societal reactions, and technological displacement. |
-| **Economic** | Consumer behavior, labor trends, market sentiment, and wealth distribution. |
-| **Political** | Governance, regulation, ideology, geopolitical shifts, and institutional trust. |
-| **Social** | Demographics, relationships, community formation, and collective behavior. |
-| **Psychological** | Fear, optimism, anxiety, aspirations, and the prevailing emotional tone. |
-
-## Reporting Structure
-
-The final synthesis produced by the system follows a structured format to ensure clarity and depth:
-
-*   **Executive Summary:** A concise description of the current zeitgeist.
-*   **Dominant Narratives:** The strongest recurring themes shaping society.
-*   **Emerging Narratives:** Patterns that appear significant but are not yet dominant.
-*   **Contradictions and Tensions:** Conflicting forces shaping the current moment.
-*   **Emotional Climate:** The prevailing emotional and psychological atmosphere.
-*   **Weak Signals:** Small developments that may become important in the future.
-*   **Evidence Base:** Representative observations supporting the major conclusions.
-*   **Open Questions:** Areas where confidence remains low and further investigation is required.
+1. **Planning** — Identifies uncertainties, contradictions, and blind spots in the Living Document. Proposes research directions that could materially change the model.
+2. **Search** — Executes targeted web searches (via DuckDuckGo or Serper) anchored to the present moment, with recency language to prioritize recent signals.
+3. **Extraction** — Processes gathered content to identify "signals" — recurring patterns, behaviors, tensions — rather than mere summaries.
+4. **Comparison** — Evaluates new signals against existing narratives. Does new evidence support, weaken, or contradict the current model?
+5. **Document Update** — Surgically updates the Living Document with validated signals and revised hypotheses.
+6. **Assessment** — Determines if the current model is robust or requires further investigation.
 
 ## System Architecture
 
-The system is built using a modular architecture designed for extensible agentic research:
+```
+main.py                          # Orchestrator: planning, search, extract loop
+living_document.md               # Central persistent state and working memory
+original_living_document.md      # Original template (backup reference)
 
-*   **`main.py`**: The central orchestrator of the agentic loop.
-*   **`prompts/`**: A collection of specialized instructional prompts for each step of the workflow.
-*   **`tools/`**: The agent's capabilities, including web searching and document editing.
-*   **`living_document.md`**: The evolving state and primary memory of the system.
+prompts/
+├── SYSTEM_PROMPT.md             # Master persona: cultural analyst / zeitgeist interpreter
+├── PLAN_PROMPT.md               # Planning layer: identify gaps, propose research
+├── SEARCH_PROMPT.md             # Search layer: recency-anchored query generation
+├── EXTRACT_PROMPT.md            # Extraction layer: signal identification from sources
+├── COMPARE_PROMPT.md            # Comparison layer: new vs existing narratives
+├── ASSESSMENT_PROMPT.md         # Assessment layer: model robustness check
+├── EDIT_PROMPT.md               # Document editing instructions
+└── GDELT_DOCUMENTATION.md       # GDELT API reference
+
+tools/
+├── web_searcher.py              # DuckDuckGo search + page reader
+├── serper_search.py             # Serper (Google) search backend
+├── text_extractor.py            # Trafilatura + BeautifulSoup content extraction
+├── document_write.py            # Surgical string-replacement document updates
+├── tool_schema/                 # Tool cards for LLM function calling
+│   ├── web_searcher_skill.md    # web_search tool definition
+│   └── write_skill.md           # write tool definition
+└── tools_schema.md              # Consolidated tool schema reference
+
+llm_clients/
+└── lm_studio_client.py          # OpenAI-compatible client (LM Studio, local models)
+
+agent_reasoning/
+└── prompt_builder.py            # Token-aware prompt assembly with file/text components
+
+database/
+└── search_database.py           # SQLite store for search results with full-text search
+
+parsers/
+├── response_parser.py           # Extracts tool calls from LLM responses
+└── tool.py                      # Tool call representation
+
+gdelt/
+├── GDELT_client.py              # GDELT 2.0 API wrapper (global media monitoring)
+├── demo_gdelt_integration.py    # Example GDELT integration flow
+└── test_gdelt_client.py         # GDELT client tests
+
+tests/
+├── conftest.py                  # Pytest configuration
+├── unit/                        # Unit tests
+└── integration/                 # Integration tests
+
+reset_living_doc.py              # Backup + reset Living Document to initial template
+```
 
 ## Getting Started
 
 ### Prerequisites
 - Python 3.10+
+- Local LLM server (LM Studio) or compatible OpenAI-compatible API endpoint
 
 ### Installation
-1. Create a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Configuration
+
+Create a `.env` file with your API keys:
+
+```
+SERPER_API_KEY=your_serper_api_key_here
+```
+
+The LLM client defaults to `http://127.0.0.1:1234/v1` (LM Studio). Modify `LmStudioClient` in `llm_clients/lm_studio_client.py` to point to a different endpoint.
 
 ### Usage
-The system is designed to be driven by an LLM-based agent. It can be configured to work with local LLM providers (like LM Studio) for privacy and local development, or via the Anthropic API.
 
-Run the agentic loop:
 ```bash
 python main.py
 ```
 
-## Key Components
+Currently `main.py` runs the search query generation loop. The full agentic cycle (plan → search → extract → compare → assess) is being wired up incrementally.
 
-### Prompts
-The system uses specialized prompt files for each step of the workflow:
-- `PLAN_PROMPT.md`: For planning the research strategy
-- `SEARCH_PROMPT.md`: For conducting web searches
-- `EXTRACT_PROMPT.md`: For extracting signals from content
-- `COMPARE_PROMPT.md`: For comparing new information with existing knowledge
-- `REFINE_PROMPT.md`: For refining and improving the living document
-- `ASSESSMENT_PROMPT.md`: For assessing the robustness of the current model
+## Key Design Principles
 
-### Tools
-The system includes several core tools:
-- **Web Searcher**: Performs web searches using DuckDuckGo and extracts content from results
-- **Document Writer**: Updates the living document with new information
-
-## Development Guide
-
-This project is designed to be an autonomous research agent that continuously evolves its understanding of the current zeitgeist. The development approach emphasizes:
-
-1. **Modular Prompt Engineering**: Each step of the workflow has a dedicated prompt file for precise control over agent behavior
-2. **Living Document Architecture**: The system maintains a persistent, evolving knowledge base that guides future research
-3. **Cross-Domain Analysis**: Integration of psychological, social, and cultural insights to avoid shallow news analysis
-
-### Core Development Patterns
-
-- **Prompt Separation**: Each stage has its own specialized prompt to ensure precise agent behavior
-- **State Persistence**: The `living_document.md` maintains all state between iterations
-- **Iterative Refinement**: The system continuously improves its understanding through feedback loops
-- **Domain Integration**: All analysis considers the six key domains to avoid narrow perspectives
+- **Recency as baseline** — all searches anchor to the present moment first, then expand backward when historical context is needed
+- **Discovery over confirmation** — treat all narratives as hypotheses; actively seek contradictory evidence
+- **Signal density over volume** — prefer a few meaningful observations over many weak ones
+- **Emergence over taxonomy** — do not force observations into predefined categories; allow explanatory frameworks to emerge from the data
+- **Behavior over headlines** — observed human behavior is more revealing than stated beliefs or news events
 
 ## Roadmap
 
-*   **Primary Source Analysis:** Focus on analyzing primary sources (e.g., trending songs, social media posts, popular media) to better understand underlying cultural sentiment and messaging (try to differentiate between organic popularity and private interest popularity).
-*   **Expanded Domain Support:** Further integrate more granular data points into the six key dimensions.
-*   **Automated Assessment Loops:** Refine the assessment step to trigger deeper, autonomous investigations into conflicting signals.
-*   **Enhanced Tool Integration:** Expand tool capabilities to include more diverse data sources and analysis methods.
+- **Full agentic loop** — wire up the complete plan → search → extract → compare → refactor → assess cycle
+- **GDELT integration** — incorporate global media monitoring for cross-regional signal detection
+- **Primary source analysis** — analyze trending media, social posts, and cultural artifacts for organic sentiment
+- **Automated assessment loops** — trigger deeper investigations when conflicting signals are detected
+- **Enhanced tool integration** — expand data sources and analysis methods
 
 ## Contributing
 

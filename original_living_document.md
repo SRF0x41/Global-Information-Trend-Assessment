@@ -16,19 +16,31 @@ All observations, narratives, hypotheses, and conclusions remain provisional and
 
 ---
 
+# WORKING NOTES
+
+This section is the agent's scratchpad.
+
+Write raw observations, half-formed thoughts, search results notes, and working hypotheses here.
+
+This is where you "think out loud" — unfiltered observations that have not yet been validated or promoted to the structured sections below.
+
+Do not delete entries from this section. Mark them as [UNVERIFIED], [SUPPORTED], or [CONTRADICTED] as evidence accumulates.
+
+When a signal in this section gains enough supporting evidence, promote it to the appropriate structured section (Emerging Signals, Active Narratives, etc.).
+
+---
+
+*No working notes yet. Begin here as you gather initial observations.*
+
+---
+
 # CURRENT STATE OF KNOWLEDGE
 
 ## Confidence Assessment
 
-What do we currently understand well?
+Phase 0: Initial Calibration and Foundational Signal Extraction.
 
-What do we understand poorly?
-
-What areas contain insufficient evidence?
-
-What assumptions remain untested?
-
-This section should be updated continuously.
+The system is transitioning from a 'Zero-Knowledge' state to establishing a 'Baseline Model.' The primary objective of this phase is to avoid anchoring bias by designing searches that seek structural shifts rather than pre-defined narratives (e.g., burnout or polarization).
 
 ---
 
@@ -132,7 +144,7 @@ Priorities should be determined by:
 4. model impact
 5. missing evidence
 
-Not by recency or popularity.
+Not by popularity. Recency is the baseline — all research must anchor to the present moment first.
 
 For each priority include:
 
@@ -194,5 +206,4 @@ Which uncertainty, contradiction, hypothesis, signal, or blind spot it addresses
 How the information could strengthen, revise, or falsify current understanding.
 
 ---
-
 

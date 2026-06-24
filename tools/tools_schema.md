@@ -25,7 +25,7 @@ Use this tool when:
 
 - Prefer **thematic queries over entity queries**
   Example:
-  Correct - "AI regulation 2026 backlash industry response"
+  Correct - "AI regulation current backlash industry response this year"
   Incorrect - "EU AI law"
 
 - Use multiple searches when needed to triangulate a signal

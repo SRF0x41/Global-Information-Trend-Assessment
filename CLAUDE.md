@@ -1,28 +1,38 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Overview
-Global Information Trend Assessment is an autonomous, agentic research framework designed to monitor, synthesize, and model the evolving global zeitgeist. It focuses on identifying patterns, narratives, and tensions across multiple domains (Cultural, Technological, Economic, Political, Social, and Psychological) rather than just summarizing news.
+Global Information Trend Assessment (GITA) is an autonomous, agentic research framework that models the evolving global zeitgeist. It identifies patterns, narratives, and tensions across psychological, social, and cultural domains. The system is not a news aggregator — it builds a provisional, revisable model of collective human experience.
 
-The system is built around a "Living Document" (`living_document.md`) which acts as the agent's persistent, evolving working memory and state.
+The central state is `living_document.md` — the agent's persistent working memory. All operations read from and surgically update this document.
 
 ## Architecture & Workflow
-The system operates through a continuous, iterative loop of specialized agentic tasks:
+The system operates through an iterative agentic loop:
 
-1.  **Planning:** Formulates research strategies and identifies information gaps based on the current state of the `living_document.md`.
-2.  **Search:** Uses `web_search` to gather external signals via web search tools.
-3.  **Extraction:** Processes information to identify "signals" (patterns, themes, or tensions) and updates the `living_document.md`.
-4.  **Comparison:** Evaluates new signals to see if they support, weaken, or contradict existing narratives in the document.
-5.  **Refactoring:** Continuously refines the `living_document.md` for human readability and coherence.
-6.  **Assessment:** Determines if the current model is robust or requires further investigation.
+1. **Planning** (`PLAN_PROMPT.md`) — identifies uncertainties, contradictions, blind spots in the Living Document
+2. **Search** (`SEARCH_PROMPT.md`) — generates recency-anchored web queries via DuckDuckGo or Serper backends
+3. **Extraction** (`EXTRACT_PROMPT.md`) — identifies "signals" (patterns, behaviors, tensions) from gathered content
+4. **Comparison** (`COMPARE_PROMPT.md`) — evaluates new signals against existing narratives
+5. **Document Update** — surgically updates `living_document.md` via `tools/document_write.py`
+6. **Assessment** (`ASSESSMENT_PROMPT.md`) — determines if the model is robust or needs further investigation
 
 ### Key Components
-- `main.py`: The entry point for the agentic loop (currently a skeleton).
-- `living_document.md`: The central, evolving state of the system and primary working memory.
-- `prompts/`: Contains specialized instructional prompts for each step of the agentic loop (e.g., `PLAN_PROMPT.md`, `SEARCH_PROMPT.md`, etc.).
-- `tools/`: Contains the agent's capabilities (e.g., `web_searcher.py`, `document_write.py`).
-- `requirements.txt`: Python dependencies.
+- `main.py`: Orchestrator. Currently runs search query generation. Full loop being wired incrementally.
+- `living_document.md`: Central evolving state. Contains research priorities, hypotheses, contradictions, blind spots, research plan.
+- `original_living_document.md`: Original template reference.
+- `reset_living_doc.py`: Backs up current state to timestamped file, resets to initial template.
+- `prompts/`: Specialized instructional prompts for each loop step. `SYSTEM_PROMPT.md` is the master persona.
+- `tools/`: Agent capabilities — `web_searcher.py` (DuckDuckGo), `serper_search.py` (Google/Serper), `text_extractor.py` (Trafilatura+BS4), `document_write.py` (string-replace document updates).
+- `tools/tool_schema/`: Tool cards defining `web_search` and `write` for LLM function calling.
+- `llm_clients/lm_studio_client.py`: OpenAI-compatible client defaulting to LM Studio at `http://127.0.0.1:1234/v1`.
+- `agent_reasoning/prompt_builder.py`: Token-aware prompt assembly. Supports adding text or file content with automatic truncation.
+- `database/search_database.py`: SQLite store for search results with relevance-ranked full-text search.
+- `parsers/response_parser.py` + `parsers/tool.py`: Extract tool call JSON blocks from LLM responses.
+- `gdelt/GDELT_client.py`: GDELT 2.0 API wrapper for global media monitoring (article search, timeline volume, image gallery).
+
+### Recency Design
+All searches are anchored to the present moment. Prompts instruct the model to include recency language (current, latest, this year, right now) in every query. Historical context is gathered only after establishing the current state.
 
 ## Development Guide
 
@@ -30,17 +40,24 @@ The system operates through a continuous, iterative loop of specialized agentic 
 - Python 3.10+
 
 ### Installation
-1. Create a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Configuration
+Create `.env` with `SERPER_API_KEY=your_key_here`. LLM client defaults to LM Studio on port 1234.
 
 ### Common Tasks
-- **Running the system:** `python main.py` (Note: `main.py` is currently a skeleton).
-- **Testing tools:** Manual test scripts are available, e.g., `python tools/test_web_searcher.py`.
-- **Managing the agent's state:** Most operations involve reading and surgically updating `living_document.md` using the `write` tool.
+- **Running the system:** `python main.py`
+- **Resetting state:** `python reset_living_doc.py` (backs up current document, restores template)
+- **Testing tools:** `python tools/test_web_searcher.py`
+- **Database operations:** `python database/test_database.py`
+- **GDELT integration:** `python gdelt/demo_gdelt_integration.py`
+- **Managing agent state:** Most operations read and surgically update `living_document.md` via `tools/document_write.py`
+
+### Known Issues
+- `serper_search.py:15` — `self.api_key = api_key` references undefined `api_key` parameter (should default to `None`)
+- `prompt_builder.py:15` — `encoding_for_model(model)` references undefined `model` variable
+- `parsers/tool.py` — missing `from typing import Dict, Any` imports; `get_arguments_named()` references `tool_arguments` without `self.`

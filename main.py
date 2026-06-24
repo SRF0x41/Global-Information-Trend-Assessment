@@ -65,26 +65,29 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     write_prompt = PromptBuilder()
     write_prompt.add_text(
         """You are about to receive two things:
-1. Notes extracted from source material.
-2. The current Living Document.
+        1. Notes extracted from source material.
+        2. The current Living Document.
 
-Your job is to update the Living Document so that it incorporates the insights found in the notes."""
-    )
+        Your job is to update the Living Document so that it incorporates the insights found in the notes."""
+        )
     write_prompt.add_text("""
-## NOTES
-""")
+        ## NOTES
+        """)
     write_prompt.add_text(text)
     write_prompt.add_text("""
-## INSTRUCTION
-Read the notes carefully. For every meaningful signal, observation, or piece of evidence they contain, use the `write` tool to surgically update the Living Document.
+        ## INSTRUCTION
+        Read the notes carefully. For every meaningful signal, observation, or piece of evidence they contain, use the `write` tool to surgically update the Living Document.
 
-- If a section already exists and the notes add to it, replace that section with the enhanced version.
-- If the notes contain brand-new information with no matching section, append it using append mode (omit `target`).
-- Make one `write` tool call per update.
-- Do NOT skip notes. Every note must be reflected in the document.
-- Do NOT rewrite unchanged sections — only touch what the notes address.
+        - Write raw, unfiltered observations to the WORKING NOTES (scratchpad) section first. Tag each as [UNVERIFIED].
+        - If an observation from the notes matches an existing signal that has been validated, promote it to the appropriate structured section (Emerging Signals, Active Narratives, etc.).
+        - If a section already exists and the notes add to it, use section-based mode with operation "append" to add to it.
+        - If you need to completely overhaul a section, use section-based mode with operation "replace".
+        - Prefer section-based mode (section + operation + content) — it's more reliable than quoting long text.
+        - Make one `write` tool call per update.
+        - Do NOT skip notes. Every note must be reflected in the document.
+        - Do NOT rewrite unchanged sections — only touch what the notes address.
 
-Below is the current Living Document.""")
+        Below is the current Living Document.""")
     write_prompt.add_from_file(LIVING_DOCUMENT)
     write_prompt.add_text(
         "Below is the tool schema that shows you how to call `write`."
@@ -113,14 +116,11 @@ Below is the current Living Document.""")
 
     for t in tool_calls:
         print(json.dumps(t.get_raw_json(), indent=4))
-        target = t.get_tool_arguments().get("target")
-        value = t.get_tool_arguments().get("value")
-        # print(target)
-        # print(value)
+        args = t.get_tool_arguments()
         try:
-            writer.update(target, value)
+            writer.apply(args)
         except Exception as e:
-            print(f"Error updating target '{target}': {e}")
+            print(f"Error applying write: {e}")
 
 
 def search_store_analyze(query):

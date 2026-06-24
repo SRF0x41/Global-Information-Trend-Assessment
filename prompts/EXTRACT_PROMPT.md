@@ -253,7 +253,25 @@ Support all extracted signals with direct evidence from the source.
 
 ---
 
-# OUTPUT FORMAT
+# WHERE TO WRITE
+
+When updating the Living Document, use the `write` tool to place observations in the correct zone:
+
+## Working Notes (Scratchpad)
+
+Write raw, freshly extracted signals here first. These are unfiltered observations from source material that have not yet been cross-referenced or validated.
+
+Format each entry as:
+
+> [UNVERIFIED] Brief observation from [source name/topic]. Note the key signal: describe what was observed. Date: YYYY-MM-DD.
+
+This is where you think out loud. Record everything notable — even if it seems minor. Minor notes here can compound into strong signals over time.
+
+## Structured Sections
+
+Promote a signal from Working Notes to a structured section (Emerging Signals, Active Narratives, etc.) only when multiple independent sources support it or when the observation is exceptionally strong.
+
+When promoting, update the Working Notes entry with [SUPPORTED] and reference the section it was promoted to.
 
 Write a series of concise narrative paragraphs.
 
