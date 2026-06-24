@@ -61,6 +61,9 @@ class WebSearcher:
         except Exception as e:
             raise RuntimeError(f"Search request failed: {e}")
 
+        # Add 5-second delay after search
+        time.sleep(5)
+
         soup = BeautifulSoup(resp.text, "html.parser")
 
         results = []
@@ -135,6 +138,9 @@ class WebSearcher:
     def search_and_read(self, query: str, num_results: int = 5) -> List[Dict[str, Any]]:
         results = self.search(query, num_results=num_results)
 
+        # Add 5-second delay after search_and_read
+        time.sleep(5)
+
         enriched = []
 
         for r in results:
@@ -158,6 +164,9 @@ class WebSearcher:
         start = time.time()
         results = self.search(query, num_results)
         elapsed = time.time() - start
+
+        # Add 5-second delay after detailed search
+        time.sleep(5)
 
         return {
             "query": query,

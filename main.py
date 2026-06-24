@@ -105,46 +105,63 @@ def write_document_test(text, append_prompt: Optional[str] = None):
         writer.update(target, value)
 
 def search():
+    # Step 1: Generate search queries based on the current living document state
     SEARCH_PROMPT = Path("prompts/SEARCH_PROMPT.md")
     search_prompt = PromptBuilder()
     search_prompt.add_from_file(SEARCH_PROMPT)
     search_prompt.add_text("Here is the current state of the Living Document.")
     search_prompt.add_from_file(LIVING_DOCUMENT)
-    search_prompt.add_text(
-        "You will now produce a comprehensive list of searches using the following tool."
-    )
+    search_prompt.add_text("You will now produce a comprehensive list of searches using the following tool.")
     SEARCH_TOOL_CARD = Path("tools/tool_schema/web_searcher_skill.md")
     search_prompt.add_from_file(SEARCH_TOOL_CARD)
 
+    # Generate search queries using LLM
     response = llm_client.send(
         system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
         user=search_prompt.get_prompt(),
     )
 
+    # Parse the tool calls from the LLM response
     parser = ResponseParser()
     tool_calls = parser.extract_tool_calls(response)
-    
+
+    # Debug: print the raw LLM response
+    print("LLM Response for search queries:")
     print(response)
 
+    # Step 2: Execute each search query and process results
     from tools.web_searcher import WebSearcher
     web_search = WebSearcher()
     for t in tool_calls:
+        # Extract the search query from the tool call
         query = t.get_tool_arguments().get("query")
+
+        # Execute the search and retrieve results
+        print(f"Searching: {query}")
         results = web_search.search_and_read(query=query)
-        print(f"Searching {query}")
+
+        # Process each search result
         searched_data = PromptBuilder()
         for s in results:
+            # Add extraction prompt and system prompt to context
             searched_data.add_from_file(Path('prompts/EXTRACT_PROMPT.md'))
             searched_data.add_from_file(SYSTEM_PROMPT)
+
+            # Format the result data for processing
             result = f"Title: {s.get('title')} \n url: {s.get('url')} content: {s.get('content')}"
             searched_data.add_text(result)
 
+            # Send the formatted data to LLM for extraction
             response = llm_client.send(
                 system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
                 user=searched_data.get_prompt()
             )
 
+            # Display the extracted information
+            print("Extracted content:")
             print(response)
+            
+            write_document_test(response)
                 
                
             
