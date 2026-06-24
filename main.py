@@ -76,16 +76,17 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     write_prompt.add_text(text)
     write_prompt.add_text("""
         ## INSTRUCTION
-        Read the notes carefully. For every meaningful signal, observation, or piece of evidence they contain, use the `write` tool to surgically update the Living Document.
+        Read the notes carefully. Then update the Living Document however you see fit.
 
-        - Write raw, unfiltered observations to the WORKING NOTES (scratchpad) section first. Tag each as [UNVERIFIED].
-        - If an observation from the notes matches an existing signal that has been validated, promote it to the appropriate structured section (Emerging Signals, Active Narratives, etc.).
-        - If a section already exists and the notes add to it, use section-based mode with operation "append" to add to it.
-        - If you need to completely overhaul a section, use section-based mode with operation "replace".
-        - Prefer section-based mode (section + operation + content) — it's more reliable than quoting long text.
-        - Make one `write` tool call per update.
-        - Do NOT skip notes. Every note must be reflected in the document.
-        - Do NOT rewrite unchanged sections — only touch what the notes address.
+        You have complete freedom over how you write:
+        - Write wherever you want — Working Notes, structured sections, or both
+        - Append new content, edit existing passages, or rewrite sections entirely
+        - Write in whatever voice and style you find most useful — analytical, narrative, speculative, critical
+        - Draw your own conclusions. Make connections the notes don't explicitly state. If something strikes you as significant, write about it.
+        - You can disagree with the existing document and revise it. If new evidence changes your mind, say so.
+        - You are not bound to process every note mechanically. Write what matters, in the way that matters most.
+
+        The Living Document is your working memory — treat it like a notebook you're actively thinking in, not a form you're filling out.
 
         Below is the current Living Document.""")
     write_prompt.add_from_file(LIVING_DOCUMENT)
