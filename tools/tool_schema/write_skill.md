@@ -8,7 +8,7 @@ The `write` tool performs surgical updates to the living document used for zeitg
 
 Target a section by its header name. This is the most reliable mode — header names are short and stable.
 
-```json
+<tool_call>
 {
   "name": "write",
   "arguments": {
@@ -17,7 +17,7 @@ Target a section by its header name. This is the most reliable mode — header n
     "content": "## New Signal\n\nDescription of the signal..."
   }
 }
-```
+</tool_call>
 
 **Arguments**
 
@@ -38,7 +38,7 @@ Target a section by its header name. This is the most reliable mode — header n
 
 Replace an exact string in the document. Use only when you need to change a specific line or phrase inside a section.
 
-```json
+<tool_call>
 {
   "name": "write",
   "arguments": {
@@ -46,8 +46,7 @@ Replace an exact string in the document. Use only when you need to change a spec
     "value": "Current State: Updated"
   }
 }
-```
-
+</tool_call>
 **Arguments**
 
 | Field    | Required | Description                                      |
@@ -63,14 +62,14 @@ Replace an exact string in the document. Use only when you need to change a spec
 
 Omit `section` and `target` to append content to the end of the document.
 
-```json
+<tool_call>
 {
   "name": "write",
   "arguments": {
     "value": "New content appended to end of document."
   }
 }
-```
+</tool_call>
 
 ---
 

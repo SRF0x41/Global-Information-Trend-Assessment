@@ -12,14 +12,13 @@ class SerperSearch:
     """
 
     def __init__(self, timeout: int = 10):
-        self.api_key = api_key
+        self.api_key = None
         self.timeout = timeout
         self.base_url = "https://google.serper.dev/search"
 
-        # Load environment variables if not provided directly
-        if self.api_key is None:
-            load_dotenv()
-            self.api_key = os.getenv("SERPER_API_KEY")
+        # Load environment variables
+        load_dotenv()
+        self.api_key = os.getenv("SERPER_API_KEY")
 
         self.session = requests.Session()
         self.session.headers.update(

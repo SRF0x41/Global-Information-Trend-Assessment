@@ -24,8 +24,6 @@ Write raw observations, half-formed thoughts, search results notes, and working 
 
 This is where you "think out loud" — unfiltered observations that have not yet been validated or promoted to the structured sections below.
 
-Do not delete entries from this section. Mark them as [UNVERIFIED], [SUPPORTED], or [CONTRADICTED] as evidence accumulates.
-
 When a signal in this section gains enough supporting evidence, promote it to the appropriate structured section (Emerging Signals, Active Narratives, etc.).
 
 ---

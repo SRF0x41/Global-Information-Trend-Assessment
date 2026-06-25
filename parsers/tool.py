@@ -17,4 +17,4 @@ class Tool:
         return self.raw_json
 
     def get_arguments_named(self):
-        return list(tool_arguments)
+        return list(self.tool_arguments)

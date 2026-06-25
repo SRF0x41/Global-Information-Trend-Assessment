@@ -182,6 +182,8 @@ def search_store_analyze(query):
 
         analyze_prompt = PromptBuilder()
         analyze_prompt.add_from_file(SYSTEM_PROMPT)
+        
+        ### Repeating work here
 
         EXTRACT_PROMPT = Path("prompts/EXTRACT_PROMPT.md")
         analyze_prompt.add_from_file(EXTRACT_PROMPT)
@@ -190,7 +192,7 @@ def search_store_analyze(query):
         analyze_prompt.add_text("Here is the following article to analyze.")
         analyze_prompt.add_text(pulled_text)
 
-        response = llm_client.send(analyze_promp.get_prompt())
+        response = llm_client.send(analyze_prompt.get_prompt())
         print("Analyse Response")
         print(response)
         write_document_test(response)
@@ -228,20 +230,20 @@ def generate_search_queries(max_retries=3):
         search_prompt.add_text(
             """You are about to receive the current state of the Living Document.
 
-Your job is to produce a comprehensive list of web searches that will reduce uncertainty, test contradictions, and expand weak signals found in the document."""
-        )
+        Your job is to produce a comprehensive list of web searches that will reduce uncertainty, test contradictions, and expand weak signals found in the document."""
+                )
         search_prompt.add_text("Below is the current Living Document.")
         search_prompt.add_from_file(LIVING_DOCUMENT)
         search_prompt.add_text(
             """
-## INSTRUCTION
-Read the Living Document carefully. For every uncertainty, contradiction, weak signal, blind spot, or open research question it contains, call the `web_search` tool to investigate it.
+            ## INSTRUCTION
+            Read the Living Document carefully. For every uncertainty, contradiction, weak signal, blind spot, or open research question it contains, call the `web_search` tool to investigate it.
 
-- Call `web_search` as many times as needed to cover the document's open areas.
-- Each call must target a different question or angle. Do NOT repeat the same query.
-- Phrase queries to uncover behavioral patterns, psychological shifts, and cultural trends, not just headlines.
-- Make one `web_search` tool call per line. Do NOT wrap them in code blocks or add explanations between calls."""
-        )
+            - Call `web_search` as many times as needed to cover the document's open areas.
+            - Each call must target a different question or angle. Do NOT repeat the same query.
+            - Phrase queries to uncover behavioral patterns, psychological shifts, and cultural trends, not just headlines.
+            - Make one `web_search` tool call per line. Do NOT wrap them in code blocks or add explanations between calls."""
+                    )
         SEARCH_TOOL_CARD = Path("tools/tool_schema/web_searcher_skill.md")
         search_prompt.add_text("Use the following tool card to call web_search:")
         search_prompt.add_from_file(SEARCH_TOOL_CARD)
@@ -295,10 +297,10 @@ def main():
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
     """
-    planning_schema = planning()
-    summarize(planning_schema)
+    # planning_schema = planning()
+    # summarize(planning_schema)
 
-    write_document_test(text=planning_schema)
+    # write_document_test(text=planning_schema)
 
     """
             Search:
@@ -312,7 +314,7 @@ def main():
     print(f"Search queries produced: {len(search_queries)}")
     for s in search_queries:
         print(f"Query: {s}")
-        # search_store_analyze(s)
+        search_store_analyze(s)
 
     """
             Extract:

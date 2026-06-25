@@ -70,16 +70,13 @@ class DocumentWrite:
             )
 
         start_of_next = self._find_next_header(lines, header_idx + 1)
-        # Also stop at a `---` separator if it comes before the next header
-        sep_idx = self._find_separator(lines, header_idx + 1, start_of_next)
 
         if operation == "replace":
-            body_end = sep_idx if sep_idx is not None else start_of_next
             new_body = self._wrap_content(content)
-            lines[header_idx + 1:body_end] = [new_body + "\n"]
+            lines[header_idx + 1:start_of_next] = [new_body + "\n"]
         elif operation == "append":
-            # Insert before the next header / separator, or at end
-            insert_at = sep_idx if sep_idx is not None else start_of_next
+            # Insert before the next header, or at end of file
+            insert_at = start_of_next if start_of_next is not None else len(lines)
             new_body = self._wrap_content(content)
             lines.insert(insert_at, new_body + "\n")
         else:
