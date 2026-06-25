@@ -38,8 +38,11 @@ def summarize(text):
         {"role": "user", "content": text},
     ]
     try:
-        server_response = llm_client.chat_completions(messages=summary_payload)
-        content = server_response["choices"][0]["message"]["content"]
+        content = llm_client.send_streaming(
+            user=summary_payload[1]["content"],
+            system=summary_payload[0]["content"],
+            purpose="summarize",
+        )
         print(content)
     except Exception as e:
         print(f"Failed Chat Completion: {e}")
@@ -53,8 +56,11 @@ def planning():
         {"role": "user", "content": LIVING_DOCUMENT.read_text(encoding="utf-8")},
     ]
     try:
-        server_response = llm_client.chat_completions(messages=planning_payload)
-        content = server_response["choices"][0]["message"]["content"]
+        content = llm_client.send_streaming(
+            system=planning_payload[0]["content"],
+            user=planning_payload[1]["content"] + "\n\n" + planning_payload[2]["content"],
+            purpose="planning",
+        )
         print(f"Planning Response:{content}")
         return content
     except Exception as e:
@@ -98,9 +104,10 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     if append_prompt:
         write_prompt.add_text(append_prompt)
 
-    response = llm_client.send(
+    response = llm_client.send_streaming(
         system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
         user=write_prompt.get_prompt(),
+        purpose="write_document",
     )
 
     print(response)
@@ -150,6 +157,12 @@ def search_store_analyze(query):
     for r in first_page_articles:
         pulled_text = page_parser.extract_text(r.get("url"))
         title = r.get("title", "No Title")
+
+        # Skip pages that returned HTTP 4xx/5xx or fetch errors
+        if pulled_text.startswith("[SKIPPED") or pulled_text.startswith("[ERROR"):
+            print(f"\n[SKIPPED] {title} — {pulled_text}")
+            continue
+
         print(f"\n[Article Found]")
         print(f"Query: {query}")
         print(f"Title: {title}")
@@ -192,7 +205,9 @@ def search_store_analyze(query):
         analyze_prompt.add_text("Here is the following article to analyze.")
         analyze_prompt.add_text(pulled_text)
 
-        response = llm_client.send(analyze_prompt.get_prompt())
+        response = llm_client.send_streaming(
+            user=analyze_prompt.get_prompt(), purpose="analyze"
+        )
         print("Analyse Response")
         print(response)
         write_document_test(response)
@@ -249,7 +264,9 @@ def generate_search_queries(max_retries=3):
         search_prompt.add_from_file(SEARCH_TOOL_CARD)
 
         # Generate search queries using LLM
-        response = llm_client.send(user=search_prompt.get_prompt())
+        response = llm_client.send_streaming(
+            user=search_prompt.get_prompt(), purpose="search_queries"
+        )
         print(f"Raw search tool calls {response}")
         print(response)
 
@@ -297,10 +314,10 @@ def main():
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
     """
-    # planning_schema = planning()
-    # summarize(planning_schema)
+    planning_schema = planning()
+    summarize(planning_schema)
 
-    # write_document_test(text=planning_schema)
+    write_document_test(text=planning_schema)
 
     """
             Search:

@@ -78,3 +78,6 @@ virtualenv/
 ENV/
 env.bak/
 .env
+
+# LLM response logs
+llm_responses/

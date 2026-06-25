@@ -1,8 +1,11 @@
+import logging
 import requests
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import time
 from bs4 import BeautifulSoup
 import trafilatura
+
+logger = logging.getLogger(__name__)
 
 
 class TextExtractor:
@@ -29,21 +32,34 @@ class TextExtractor:
     # ----------------------------
     # EXTRACT TEXT FROM URL
     # ----------------------------
+    def _fetch_url(self, url: str) -> Optional[str]:
+        """
+        Fetch a URL and return the HTML body.
+        Returns None on 4xx/5xx responses or network errors.
+        """
+        if not url or not url.startswith("http"):
+            return None
+
+        try:
+            resp = self.session.get(url, timeout=self.timeout)
+            if resp.status_code >= 400:
+                logger.warning("Skipping URL %s — HTTP %s", url, resp.status_code)
+                return None
+            resp.raise_for_status()
+            return resp.text
+        except Exception as e:
+            logger.warning("Error fetching %s: %s", url, e)
+            return None
+
     def extract_text(self, url: str) -> str:
         """
         Extract relevant text content from a given URL.
         Uses trafilatura for high-quality extraction with fallback to BeautifulSoup.
+        Returns "[SKIPPED ...]" on invalid URLs or HTTP errors.
         """
-        if not url or not url.startswith("http"):
-            return "[SKIPPED invalid URL]"
-
-        try:
-            resp = self.session.get(url, timeout=self.timeout)
-            resp.raise_for_status()
-        except Exception as e:
-            return f"[ERROR fetching page: {e}]"
-
-        html = resp.text
+        html = self._fetch_url(url)
+        if html is None:
+            return "[SKIPPED could not fetch page]"
 
         # Try high-quality extractor first (trafilatura)
         try:
@@ -85,15 +101,15 @@ class TextExtractor:
 
         # Try to extract title if possible
         title = ""
-        try:
-            resp = self.session.get(url, timeout=self.timeout)
-            resp.raise_for_status()
-            soup = BeautifulSoup(resp.text, "html.parser")
-            title_tag = soup.find("title")
-            if title_tag:
-                title = title_tag.get_text().strip()
-        except Exception:
-            pass
+        html = self._fetch_url(url)
+        if html:
+            try:
+                soup = BeautifulSoup(html, "html.parser")
+                title_tag = soup.find("title")
+                if title_tag:
+                    title = title_tag.get_text().strip()
+            except Exception:
+                pass
 
         return {
             "url": url,
