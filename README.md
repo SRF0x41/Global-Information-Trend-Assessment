@@ -61,8 +61,10 @@ Each phase does two kinds of work:
 | **Plan** | Identify gaps, generate search queries | Write a "Current Synthesis" — what does the model as a whole suggest about this moment? |
 | **Search** | Execute recency-anchored queries | Note patterns, contradictions, and surprises that inform next steps |
 | **Extract** | Pull signals from sources, ground in evidence | Draw bold conclusions, weave signals into narrative, answer "so what?" |
-| **Compare** | Evaluate new signals against existing model | Determine whether the overall interpretation of the moment is shifting |
-| **Assess** | Check model robustness | Judge whether the picture is coherent or fundamentally unsettled |
+| **Update** | Surgically edit `living_document.md` | Incorporate insights, revise hypotheses, migrate signals between sections |
+| **Refactor** | Transform Living Document into polished report | Produce a cohesive Zeitgeist Report — cultural essay, not a summary |
+
+Note: The Compare and Assess steps are planned but not yet wired into the active flow.
 
 ## Core Concept: The Living Document
 
@@ -87,9 +89,10 @@ Signals migrate from scratchpad to structured sections only when multiple indepe
 ## System Architecture
 
 ```
-main.py                          # Orchestrator: planning, search, extract loop
+main.py                          # Orchestrator: search, extract, update, refactor flow
 living_document.md               # Central persistent state and working memory
 original_living_document.md      # Original template (backup reference)
+zeitgeist_report.md              # Polished cultural essay generated from Living Document
 
 prompts/
 ├── SYSTEM_PROMPT.md             # Master persona, analytical lens, synthesis framework
@@ -99,6 +102,7 @@ prompts/
 ├── COMPARE_PROMPT.md            # Compare new signals against existing model
 ├── ASSESSMENT_PROMPT.md         # Model robustness assessment
 ├── EDIT_PROMPT.md               # Surgical document update instructions
+├── REFACTOR_PROMPT.md           # Transform Living Document into Zeitgeist Report
 └── GDELT_DOCUMENTATION.md       # GDELT API reference for global media monitoring
 
 tools/
@@ -112,7 +116,7 @@ tools/
 └── tools_schema.md              # Consolidated tool schema reference
 
 llm_clients/
-└── lm_studio_client.py          # OpenAI-compatible client (LM Studio, local models)
+└── lm_studio_client.py          # OpenAI-compatible client with repeat-loop detection and retry
 
 agent_reasoning/
 └── prompt_builder.py            # Token-aware prompt assembly with file/text components
@@ -167,15 +171,15 @@ The LLM client defaults to `http://127.0.0.1:1234/v1` (LM Studio). Modify `LmStu
 python main.py
 ```
 
-Currently `main.py` runs the search query generation loop. The full agentic cycle (plan → search → extract → compare → assess) is being wired up incrementally.
+The active flow in `main.py` currently runs: **search → extract → update → refactor**. The `generate_refactor()` step transforms the Living Document into a polished Zeitgeist Report (`zeitgeist_report.md`). The Compare and Assess steps are planned but not yet wired.
 
-## Roadmap
+## Current State
 
-- **Full agentic loop** — wire up the complete plan → search → extract → compare → assess cycle
-- **GDELT integration** — incorporate global media monitoring for cross-regional signal detection
-- **Primary source analysis** — analyze trending media, social posts, and cultural artifacts for organic sentiment
-- **Automated assessment loops** — trigger deeper investigations when conflicting signals are detected
-- **Enhanced tool integration** — expand data sources and analysis methods
+- **Search loop** — generates queries from Living Document gaps, executes via Serper, stores results in SQLite
+- **Extract & Update** — analyzes each article for signals, surgically updates the Living Document
+- **Refactor** — produces a cohesive cultural essay from the internal research state
+- **Repeat detection** — LLM client detects and retries on repeat loops in streaming output
+- **Planned** — Compare (new vs existing narratives), Assess (model robustness), full autonomous loop
 
 ## Contributing
 

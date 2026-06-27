@@ -24,6 +24,8 @@ PLAN_PROMPT = Path("prompts/PLAN_PROMPT.md")
 LIVING_DOCUMENT = Path("living_document.md")
 WRITE_TO_LIVING_DOCUMENT = Path("WRITE_TO_LIVING_DOCUMENT.md")
 
+ZEITGEIST_REPORT = Path("zeitgeist_report.md")
+
 
 # md_content = Path("report.md").read_text(encoding="utf-8")
 
@@ -41,7 +43,6 @@ def summarize(text):
         content = llm_client.send_streaming(
             user=summary_payload[1]["content"],
             system=summary_payload[0]["content"],
-            purpose="summarize",
         )
         print(content)
     except Exception as e:
@@ -59,7 +60,6 @@ def planning():
         content = llm_client.send_streaming(
             system=planning_payload[0]["content"],
             user=planning_payload[1]["content"] + "\n\n" + planning_payload[2]["content"],
-            purpose="planning",
         )
         print(f"Planning Response:{content}")
         return content
@@ -107,7 +107,6 @@ def write_document_test(text, append_prompt: Optional[str] = None):
     response = llm_client.send_streaming(
         system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
         user=write_prompt.get_prompt(),
-        purpose="write_document",
     )
 
     print(response)
@@ -206,7 +205,7 @@ def search_store_analyze(query):
         analyze_prompt.add_text(pulled_text)
 
         response = llm_client.send_streaming(
-            user=analyze_prompt.get_prompt(), purpose="analyze"
+            user=analyze_prompt.get_prompt()
         )
         print("Analyse Response")
         print(response)
@@ -265,7 +264,7 @@ def generate_search_queries(max_retries=3):
 
         # Generate search queries using LLM
         response = llm_client.send_streaming(
-            user=search_prompt.get_prompt(), purpose="search_queries"
+            user=search_prompt.get_prompt()
         )
         print(f"Raw search tool calls {response}")
         print(response)
@@ -296,6 +295,36 @@ def generate_search_queries(max_retries=3):
     print("Failed to generate search queries after maximum retries.")
     return []
 
+def generate_refactor():
+    """
+    Refactor:
+    living document + REFACTOR_PROMPT + SYSTEM_PROMPT
+        - Transform the internal research state into a human-readable Zeitgeist Report
+        - Write the complete report to zeitgeist_report.md
+    """
+    print("--- REFACTOR: Generating Zeitgeist Report ---")
+
+    REFACTOR_PROMPT = Path("prompts/REFACTOR_PROMPT.md")
+
+    refactor = PromptBuilder()
+    refactor.add_from_file(REFACTOR_PROMPT)
+    refactor.add_from_file(LIVING_DOCUMENT)
+
+    response = llm_client.send_streaming(
+        system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
+        user=refactor.get_prompt(),
+    )
+
+    if response:
+        ZEITGEIST_REPORT.write_text(response, encoding="utf-8")
+        print(f"Zeitgeist Report written to {ZEITGEIST_REPORT}")
+        summarize(response)
+        return response
+    else:
+        print("Failed to generate Zeitgeist Report — LLM returned empty response.")
+        return None
+
+
 
 def main():
     """
@@ -314,10 +343,10 @@ def main():
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
     """
-    planning_schema = planning()
-    summarize(planning_schema)
+    # planning_schema = planning()
+    # summarize(planning_schema)
 
-    write_document_test(text=planning_schema)
+    # write_document_test(text=planning_schema)
 
     """
             Search:
@@ -327,25 +356,39 @@ def main():
                 write notes and analyses directly to the living document.            
     """
     # Ask the llm to create a list of search queries
-    search_queries = generate_search_queries()
-    print(f"Search queries produced: {len(search_queries)}")
-    for s in search_queries:
-        print(f"Query: {s}")
-        search_store_analyze(s)
-
+    # search_queries = generate_search_queries()
+    # print(f"Search queries produced: {len(search_queries)}")
+    
     """
             Extract:
             living document + EXTRACT_PROMPT + TOOL_SCHEMA
                 - Extract relevant 'signals' and edit the living document
                 - Tool call to edit the living document
+    """
+    # for s in search_queries:
+    #     print(f"Query: {s}")
+    #     search_store_analyze(s)
 
-            Compare:
+  
+    """
+
+            Compare: (Were ignoring this step for now, i forgot what i meant and doesnt seem relevant at the moment,
+            i think this is for when the doc needs to be ammended with new info, i think extract is already doing this)
             living document + COMPARE_PROMPT + TOOL_SCHEMA
                 - does this change anything in the report
+    """
+    
+    """
 
             Refactor:
             living document + REFACTOR_PROMPT + TOOL_SCHEMA
                 - Make the report more human readable
+                
+    """
+    
+    generate_refactor()
+    
+    """
 
             BREAK:
             living document + BREAK_PROMPT

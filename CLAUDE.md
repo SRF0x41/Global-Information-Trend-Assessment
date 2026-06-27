@@ -13,19 +13,23 @@ The system operates through an iterative agentic loop:
 1. **Planning** (`PLAN_PROMPT.md`) — identifies uncertainties, contradictions, blind spots in the Living Document
 2. **Search** (`SEARCH_PROMPT.md`) — generates recency-anchored web queries via DuckDuckGo or Serper backends
 3. **Extraction** (`EXTRACT_PROMPT.md`) — identifies "signals" (patterns, behaviors, tensions) from gathered content
-4. **Comparison** (`COMPARE_PROMPT.md`) — evaluates new signals against existing narratives
-5. **Document Update** — surgically updates `living_document.md` via `tools/document_write.py`
-6. **Assessment** (`ASSESSMENT_PROMPT.md`) — determines if the model is robust or needs further investigation
+4. **Document Update** — surgically updates `living_document.md` via `tools/document_write.py`
+5. **Refactor** (`REFACTOR_PROMPT.md`) — transforms the Living Document into a polished Zeitgeist Report (`zeitgeist_report.md`)
+6. **Comparison** (`COMPARE_PROMPT.md`) — evaluates new signals against existing narratives (planned)
+7. **Assessment** (`ASSESSMENT_PROMPT.md`) — determines if the model is robust or needs further investigation (planned)
+
+Active flow: search → extract → update → refactor. Compare/Assess not yet wired.
 
 ### Key Components
-- `main.py`: Orchestrator. Currently runs search query generation. Full loop being wired incrementally.
+- `main.py`: Orchestrator. Active flow: search → extract → update → refactor. Full loop being wired incrementally.
 - `living_document.md`: Central evolving state. Contains research priorities, hypotheses, contradictions, blind spots, research plan.
+- `zeitgeist_report.md`: Polished cultural essay generated from the Living Document by the Refactor step.
 - `original_living_document.md`: Original template reference.
 - `reset_living_doc.py`: Backs up current state to timestamped file, resets to initial template.
-- `prompts/`: Specialized instructional prompts for each loop step. `SYSTEM_PROMPT.md` is the master persona.
+- `prompts/`: Specialized instructional prompts for each loop step. `SYSTEM_PROMPT.md` is the master persona. `REFACTOR_PROMPT.md` instructs the agent to produce the Zeitgeist Report.
 - `tools/`: Agent capabilities — `web_searcher.py` (DuckDuckGo), `serper_search.py` (Google/Serper), `text_extractor.py` (Trafilatura+BS4), `document_write.py` (string-replace document updates).
 - `tools/tool_schema/`: Tool cards defining `web_search` and `write` for LLM function calling.
-- `llm_clients/lm_studio_client.py`: OpenAI-compatible client defaulting to LM Studio at `http://127.0.0.1:1234/v1`.
+- `llm_clients/lm_studio_client.py`: OpenAI-compatible client defaulting to LM Studio at `http://127.0.0.1:1234/v1`. Includes repeat-loop detection with automatic retry on looped responses.
 - `agent_reasoning/prompt_builder.py`: Token-aware prompt assembly. Supports adding text or file content with automatic truncation.
 - `database/search_database.py`: SQLite store for search results with relevance-ranked full-text search.
 - `parsers/response_parser.py` + `parsers/tool.py`: Extract tool call JSON blocks from LLM responses.
