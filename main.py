@@ -299,44 +299,23 @@ def generate_search_queries(max_retries=3):
 def generate_refactor():
     """
     Refactor:
-    living document + REFACTOR_PROMPT + SYSTEM_PROMPT + existing zeitgeist report
-        - Ask the LLM to surgically update the Zeitgeist Report using the write tool
-        - The LLM reads the current report and the Living Document, then produces
-          incremental edits (append/replace sections) rather than a full rewrite
+    living document + REFACTOR_PROMPT + SYSTEM_PROMPT
+        - The LLM reads the Living Document and outputs the full Zeitgeist Report essay
+        - Response is written directly to zeitgeist_report.md (no surgical edits)
     """
     print("--- REFACTOR: Generating Zeitgeist Report ---")
 
     REFACTOR_PROMPT = Path("prompts/REFACTOR_PROMPT.md")
 
-    # Build prompt: refactor instructions + living document + existing report
+    # Build prompt: system + refactor instructions + living document
     refactor = PromptBuilder()
     refactor.add_from_file(SYSTEM_PROMPT)
     refactor.add_from_file(REFACTOR_PROMPT)
     refactor.add_text("Below is the current Living Document — your research source of truth.")
     refactor.add_from_file(LIVING_DOCUMENT)
-
-    # Include the existing zeitgeist report so the LLM can edit it surgically
-    if ZEITGEIST_REPORT.exists() and ZEITGEIST_REPORT.stat().st_size > 0:
-        refactor.add_text("Below is the current Zeitgeist Report — your working draft to edit.")
-        refactor.add_from_file(ZEITGEIST_REPORT)
-        refactor.add_text(
-            "\nUsing the `write` tool, surgically update the Zeitgeist Report.\n"
-            "Compare the Living Document against the current report and decide what needs to change:\n"
-            "  - Append new sections for signals or themes not yet in the report.\n"
-            "  - Replace sections that are outdated or need refinement.\n"
-            "  - Leave sections that are still accurate untouched.\n"
-            "Make one `write` tool call per edit. Do NOT output the full report."
-        )
-    else:
-        # No existing report — generate from scratch
-        refactor.add_text(
-            "\nNo existing Zeitgeist Report found. Produce the complete report as a single `write` tool call "
-            "with operation `create`."
-        )
-
-    # Add the write tool schema so the LLM knows how to call it
-    refactor.add_text("\nUse the following tool card to call `write`:")
-    refactor.add_from_file(Path("tools/tool_schema/write_skill.md"))
+    refactor.add_text(
+        "\nProduce the complete Zeitgeist Report essay as your response."
+    )
 
     response = llm_client.send_streaming(
         system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
@@ -347,25 +326,9 @@ def generate_refactor():
         print("Failed to generate Zeitgeist Report — LLM returned empty response.")
         return None
 
-    # Parse tool calls and apply them to the zeitgeist report
-    parser = ResponseParser()
-    tool_calls = parser.extract_tool_calls(response)
-
-    from tools.document_write import DocumentWrite
-    writer = DocumentWrite(ZEITGEIST_REPORT)
-
-    print(f"\nApplying {len(tool_calls)} write operation(s) to Zeitgeist Report")
-    print(80 * "=")
-
-    for t in tool_calls:
-        args = t.get_tool_arguments()
-        try:
-            writer.apply(args)
-            print(f"Applied: {args.get('operation', 'update')} — {args.get('section', 'target')}")
-        except Exception as e:
-            print(f"Error applying write: {e}")
-
-    print(f"\nZeitgeist Report updated at {ZEITGEIST_REPORT}")
+    # Write the LLM response directly to the zeitgeist report file
+    ZEITGEIST_REPORT.write_text(response, encoding="utf-8")
+    print(f"\nZeitgeist Report written to {ZEITGEIST_REPORT}")
     summarize(response)
     return response
 
@@ -389,51 +352,51 @@ def main():
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
     """
-    for i in range(1):
-        planning_schema = planning()
-        summarize(planning_schema)
+    # for i in range(1):
+    #     planning_schema = planning()
+    #     summarize(planning_schema)
 
-        write_document_test(text=planning_schema)
+    #     write_document_test(text=planning_schema)
 
-        """
-                Search:
-                living document + SEARCH_PROMPT + TOOL_SCHEMA
-                    - Conduct web searches according to the plan set out in the living document
-                    - Tools call to search and edit living document, remember all notes are kept in the living documents,
-                    write notes and analyses directly to the living document.            
-        """
-        # Ask the llm to create a list of search queries
-        search_queries = generate_search_queries()
-        print(f"Search queries produced: {len(search_queries)}")
+    #     """
+    #             Search:
+    #             living document + SEARCH_PROMPT + TOOL_SCHEMA
+    #                 - Conduct web searches according to the plan set out in the living document
+    #                 - Tools call to search and edit living document, remember all notes are kept in the living documents,
+    #                 write notes and analyses directly to the living document.            
+    #     """
+    #     # Ask the llm to create a list of search queries
+    #     search_queries = generate_search_queries()
+    #     print(f"Search queries produced: {len(search_queries)}")
         
-        """
-                Extract:
-                living document + EXTRACT_PROMPT + TOOL_SCHEMA
-                    - Extract relevant 'signals' and edit the living document
-                    - Tool call to edit the living document
-        """
-        for s in search_queries:
-            print(f"Query: {s}")
-            search_store_analyze(s)
+    #     """
+    #             Extract:
+    #             living document + EXTRACT_PROMPT + TOOL_SCHEMA
+    #                 - Extract relevant 'signals' and edit the living document
+    #                 - Tool call to edit the living document
+    #     """
+    #     for s in search_queries:
+    #         print(f"Query: {s}")
+    #         search_store_analyze(s)
 
+
+    """
+
+            Compare: (Were ignoring this step for now, i forgot what i meant and doesnt seem relevant at the moment,
+            i think this is for when the doc needs to be ammended with new info, i think extract is already doing this)
+            living document + COMPARE_PROMPT + TOOL_SCHEMA
+                - does this change anything in the report
+    """
     
-        """
+    """
 
-                Compare: (Were ignoring this step for now, i forgot what i meant and doesnt seem relevant at the moment,
-                i think this is for when the doc needs to be ammended with new info, i think extract is already doing this)
-                living document + COMPARE_PROMPT + TOOL_SCHEMA
-                    - does this change anything in the report
-        """
+            Refactor:
+            living document + REFACTOR_PROMPT + TOOL_SCHEMA
+                - Make the report more human readable
+                
+    """
         
-        """
-
-                Refactor:
-                living document + REFACTOR_PROMPT + TOOL_SCHEMA
-                    - Make the report more human readable
-                    
-        """
-        
-        generate_refactor()
+    generate_refactor()
 
     elapsed = time.time() - start_time
     hours, rem = divmod(elapsed, 3600)

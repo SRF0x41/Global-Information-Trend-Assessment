@@ -141,12 +141,35 @@ class DocumentWrite:
         return sections
 
     @staticmethod
-    def _find_header_line(lines: list, section: str) -> int | None:
-        """Find line index of a header containing *section* text."""
+    def _find_header_line(lines: list, section: str, fuzzy_threshold: float = 0.85) -> int | None:
+        """Find line index of a header matching *section* text.
+
+        Exact match first (case-insensitive). If no exact match, fall back
+        to fuzzy matching against all header texts using difflib.
+        """
+        # Exact match (case-insensitive)
         pattern = re.compile(r"^#+\s+" + re.escape(section) + r"\s*$", re.IGNORECASE)
         for i, line in enumerate(lines):
             if pattern.match(line.rstrip()):
                 return i
+
+        # Fuzzy fallback: compare against all header texts
+        headers = []
+        for i, line in enumerate(lines):
+            m = re.match(r"^#+\s+(.+)$", line.strip())
+            if m:
+                headers.append((i, m.group(1).strip()))
+
+        best_ratio = 0.0
+        best_idx = None
+        for idx, text in headers:
+            ratio = difflib.SequenceMatcher(None, section, text).ratio()
+            if ratio > best_ratio:
+                best_ratio = ratio
+                best_idx = idx
+
+        if best_ratio >= fuzzy_threshold:
+            return best_idx
         return None
 
     @staticmethod

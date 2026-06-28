@@ -5,7 +5,7 @@ You are about to receive two things:
 1. **The Living Document** — a working memory filled with raw notes, signals, hypotheses, contradictions, and analytical sections gathered through iterative research.
 2. **The Current Zeitgeist Report** — your previous draft of the polished cultural essay. (If no report exists yet, generate one from scratch.)
 
-Your task is to **surgically update** the Zeitgeist Report so it reflects the latest state of the Living Document.
+Your task is to **write** the Zeitgeist Report so it reflects the latest state of the Living Document.
 
 This is not a summary. It is a cultural intelligence briefing — a narrative synthesis that tells the reader what it feels like to be human right now, grounded in every signal and analysis the Living Document contains.
 
@@ -77,15 +77,6 @@ This section should leave the reader with a sense of having understood something
 
 ---
 
-## EDITING STRATEGY
+## OUTPUT
 
-You will update the report using the `write` tool. **Do NOT output the full report text.** Instead, make surgical edits:
-
-- **If no report exists:** use `write` with `operation: "create"` to produce the full report from scratch.
-- **If a report exists:** compare the Living Document against it and decide what needs changing:
-  - **Append** new sections for signals/themes not yet covered.
-  - **Replace** sections that are outdated, contradicted by new evidence, or need refinement.
-  - **Leave untouched** sections that are still accurate and well-supported.
-- Make one `write` tool call per edit. Each call should be focused on a single section.
-- If the Living Document contains new signals that don't fit existing sections, create new ones with appropriate headers.
-- If a section in the report is no longer supported by evidence in the Living Document, replace it with updated analysis or remove it by replacing with empty content.
+Write the complete report as your response. Output the full essay every time — do not summarize or describe what you would write, actually write it.
