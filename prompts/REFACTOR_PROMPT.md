@@ -1,13 +1,10 @@
-# REFACTOR — Update the Zeitgeist Report
+# REFACTOR — Refine the Zeitgeist Report
 
-You are about to receive two things:
+You are about to receive the current draft of the Zeitgeist Report — a polished cultural essay.
 
-1. **The Living Document** — a working memory filled with raw notes, signals, hypotheses, contradictions, and analytical sections gathered through iterative research.
-2. **The Current Zeitgeist Report** — your previous draft of the polished cultural essay. (If no report exists yet, generate one from scratch.)
+Your task is to **refine and improve** this report. Read it carefully, then produce a better version.
 
-Your task is to **write** the Zeitgeist Report so it reflects the latest state of the Living Document.
-
-This is not a summary. It is a cultural intelligence briefing — a narrative synthesis that tells the reader what it feels like to be human right now, grounded in every signal and analysis the Living Document contains.
+This is not a summary. It is a cultural intelligence briefing — a narrative synthesis that tells the reader what it feels like to be human right now.
 
 ---
 
@@ -55,25 +52,28 @@ This section should leave the reader with a sense of having understood something
 
 ---
 
-## HOW TO WRITE
+## HOW TO REFINE
 
+- **Sharpen the prose.** Cut hedging, tighten sentences, strengthen voice.
+- **Deepen the analysis.** Where the current draft states observations, push further into interpretation. Where it hedges, find the bold conclusion the evidence supports.
+- **Improve the flow.** Ensure transitions between sections feel natural. Weave themes across movements so the essay reads as one piece, not stitched sections.
+- **Fill gaps.** If a section from the structure above is missing, write it. If a section is thin, expand it.
+- **Cut what doesn't work.** Remove passages that repeat, wander, or don't serve the narrative.
 - **Lead with insight, not inventory.** Do not enumerate signals. Synthesize them.
-- **Use the three analytical layers.** Weave psychological, social, and cultural observations together — they are interconnected, not separate.
 - **Answer "so what?" at every level.** Why does this pattern matter? What does it suggest about where things are heading?
 - **Write with voice.** This is a cultural intelligence briefing, not a database export. The prose should be sharp, vivid, and memorable.
 - **Distinguish confidence.** It is fine to say "the evidence strongly suggests X" alongside "it is possible that Y."
-- **Ground every leap.** Creative interpretation is expected, but every conclusion should be traceable back to the signals in the Living Document.
-- **Cite your sources.** Use in-text citations (e.g., [Signal A], [Source Name]) to anchor your narrative in the research provided.
+- **Ground every leap.** Creative interpretation is expected, but every conclusion should be traceable back to the signals in the report.
 
 ---
 
 ## WHAT NOT TO DO
 
-- Do not reproduce the Living Document's internal structure (working notes, tags, research plans).
 - Do not list signals mechanically or reproduce note-taking format.
 - Do not hedge into meaninglessness. A bold conclusion with stated confidence is better than a safe summary.
-- Do not introduce claims or evidence not present in the Living Document.
+- Do not introduce claims or evidence not present in the report.
 - Do not write like a news summary or trend report. This is cultural analysis.
+- Do not summarize or describe what you would write — actually write it.
 
 ---
 

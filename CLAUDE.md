@@ -18,10 +18,10 @@ The system operates through an iterative agentic loop:
 6. **Comparison** (`COMPARE_PROMPT.md`) — evaluates new signals against existing narratives (planned)
 7. **Assessment** (`ASSESSMENT_PROMPT.md`) — determines if the model is robust or needs further investigation (planned)
 
-Active flow: search → extract → update → refactor. Compare/Assess not yet wired.
+Active flow in main.py: refactor only (`generate_refactor()`). The search → extract → update pipeline is implemented but commented out in `main()`, ready to be wired back in. Compare/Assess not yet wired.
 
 ### Key Components
-- `main.py`: Orchestrator. Active flow: search → extract → update → refactor. Full loop being wired incrementally.
+- `main.py`: Orchestrator. Currently runs `generate_refactor()` (produces Zeitgeist Report from Living Document). Search → extract → update pipeline implemented but commented out in `main()`, ready to wire back in. Full autonomous loop being built incrementally.
 - `living_document.md`: Central evolving state. Contains research priorities, hypotheses, contradictions, blind spots, research plan.
 - `zeitgeist_report.md`: Polished cultural essay generated from the Living Document by the Refactor step.
 - `original_living_document.md`: Original template reference.
@@ -61,7 +61,3 @@ Create `.env` with `SERPER_API_KEY=your_key_here`. LLM client defaults to LM Stu
 - **GDELT integration:** `python gdelt/demo_gdelt_integration.py`
 - **Managing agent state:** Most operations read and surgically update `living_document.md` via `tools/document_write.py`
 
-### Known Issues
-- `serper_search.py:15` — `self.api_key = api_key` references undefined `api_key` parameter (should default to `None`)
-- `prompt_builder.py:15` — `encoding_for_model(model)` references undefined `model` variable
-- `parsers/tool.py` — missing `from typing import Dict, Any` imports; `get_arguments_named()` references `tool_arguments` without `self.`

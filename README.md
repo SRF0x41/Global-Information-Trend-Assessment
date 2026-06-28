@@ -171,15 +171,15 @@ The LLM client defaults to `http://127.0.0.1:1234/v1` (LM Studio). Modify `LmStu
 python main.py
 ```
 
-The active flow in `main.py` currently runs: **search → extract → update → refactor**. The `generate_refactor()` step transforms the Living Document into a polished Zeitgeist Report (`zeitgeist_report.md`). The Compare and Assess steps are planned but not yet wired.
+The active flow in `main.py` currently runs: **refactor** — `generate_refactor()` reads the Living Document and produces a polished Zeitgeist Report (`zeitgeist_report.md`). The search → extract → update pipeline is implemented but commented out, ready to be wired back into the full autonomous loop. Compare and Assess steps are planned but not yet implemented.
 
 ## Current State
 
-- **Search loop** — generates queries from Living Document gaps, executes via Serper, stores results in SQLite
-- **Extract & Update** — analyzes each article for signals, surgically updates the Living Document
-- **Refactor** — produces a cohesive cultural essay from the internal research state
+- **Refactor** — `main.py` currently runs `generate_refactor()`, which reads the Living Document and produces a polished Zeitgeist Report (`zeitgeist_report.md`) as a cultural essay
+- **Search loop** — generates queries from Living Document gaps, executes via Serper, stores results in SQLite (commented out in main, available for wiring)
+- **Extract & Update** — analyzes each article for signals, surgically updates the Living Document (commented out in main, available for wiring)
 - **Repeat detection** — LLM client detects and retries on repeat loops in streaming output
-- **Planned** — Compare (new vs existing narratives), Assess (model robustness), full autonomous loop
+- **Planned** — Compare (new vs existing narratives), Assess (model robustness), full autonomous loop with planning wired back in
 
 ## Contributing
 

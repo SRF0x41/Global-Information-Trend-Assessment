@@ -299,22 +299,28 @@ def generate_search_queries(max_retries=3):
 def generate_refactor():
     """
     Refactor:
-    living document + REFACTOR_PROMPT + SYSTEM_PROMPT
-        - The LLM reads the Living Document and outputs the full Zeitgeist Report essay
-        - Response is written directly to zeitgeist_report.md (no surgical edits)
+    current zeitgeist report + REFACTOR_PROMPT + SYSTEM_PROMPT
+        - The LLM reads the existing report and outputs a refined, improved version
+        - Response is written directly to zeitgeist_report.md (full rewrite each pass)
     """
     print("--- REFACTOR: Generating Zeitgeist Report ---")
 
     REFACTOR_PROMPT = Path("prompts/REFACTOR_PROMPT.md")
 
-    # Build prompt: system + refactor instructions + living document
+    # Build prompt: system + refactor instructions + current report
     refactor = PromptBuilder()
-    refactor.add_from_file(SYSTEM_PROMPT)
     refactor.add_from_file(REFACTOR_PROMPT)
-    refactor.add_text("Below is the current Living Document — your research source of truth.")
-    refactor.add_from_file(LIVING_DOCUMENT)
+
+    if ZEITGEIST_REPORT.exists() and ZEITGEIST_REPORT.stat().st_size > 0:
+        refactor.add_text("Below is the current Zeitgeist Report — refine it.")
+        refactor.add_from_file(ZEITGEIST_REPORT)
+    else:
+        refactor.add_text(
+            "No existing Zeitgeist Report found. Produce one from scratch."
+        )
+
     refactor.add_text(
-        "\nProduce the complete Zeitgeist Report essay as your response."
+        "\nProduce the complete, refined Zeitgeist Report essay as your response."
     )
 
     response = llm_client.send_streaming(
@@ -352,51 +358,51 @@ def main():
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
     """
-    # for i in range(1):
-    #     planning_schema = planning()
-    #     summarize(planning_schema)
+    for i in range(2):
+        planning_schema = planning()
+        summarize(planning_schema)
 
-    #     write_document_test(text=planning_schema)
+        write_document_test(text=planning_schema)
 
-    #     """
-    #             Search:
-    #             living document + SEARCH_PROMPT + TOOL_SCHEMA
-    #                 - Conduct web searches according to the plan set out in the living document
-    #                 - Tools call to search and edit living document, remember all notes are kept in the living documents,
-    #                 write notes and analyses directly to the living document.            
-    #     """
-    #     # Ask the llm to create a list of search queries
-    #     search_queries = generate_search_queries()
-    #     print(f"Search queries produced: {len(search_queries)}")
+        """
+                Search:
+                living document + SEARCH_PROMPT + TOOL_SCHEMA
+                    - Conduct web searches according to the plan set out in the living document
+                    - Tools call to search and edit living document, remember all notes are kept in the living documents,
+                    write notes and analyses directly to the living document.            
+        """
+        # Ask the llm to create a list of search queries
+        search_queries = generate_search_queries()
+        print(f"Search queries produced: {len(search_queries)}")
         
-    #     """
-    #             Extract:
-    #             living document + EXTRACT_PROMPT + TOOL_SCHEMA
-    #                 - Extract relevant 'signals' and edit the living document
-    #                 - Tool call to edit the living document
-    #     """
-    #     for s in search_queries:
-    #         print(f"Query: {s}")
-    #         search_store_analyze(s)
+        """
+                Extract:
+                living document + EXTRACT_PROMPT + TOOL_SCHEMA
+                    - Extract relevant 'signals' and edit the living document
+                    - Tool call to edit the living document
+        """
+        for s in search_queries:
+            print(f"Query: {s}")
+            search_store_analyze(s)
 
 
-    """
+        """
 
-            Compare: (Were ignoring this step for now, i forgot what i meant and doesnt seem relevant at the moment,
-            i think this is for when the doc needs to be ammended with new info, i think extract is already doing this)
-            living document + COMPARE_PROMPT + TOOL_SCHEMA
-                - does this change anything in the report
-    """
-    
-    """
-
-            Refactor:
-            living document + REFACTOR_PROMPT + TOOL_SCHEMA
-                - Make the report more human readable
-                
-    """
+                Compare: (Were ignoring this step for now, i forgot what i meant and doesnt seem relevant at the moment,
+                i think this is for when the doc needs to be ammended with new info, i think extract is already doing this)
+                living document + COMPARE_PROMPT + TOOL_SCHEMA
+                    - does this change anything in the report
+        """
         
-    generate_refactor()
+        """
+
+                Refactor:
+                living document + REFACTOR_PROMPT + TOOL_SCHEMA
+                    - Make the report more human readable
+                    
+        """
+            
+        generate_refactor()
 
     elapsed = time.time() - start_time
     hours, rem = divmod(elapsed, 3600)
