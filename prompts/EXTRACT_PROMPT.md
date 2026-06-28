@@ -176,6 +176,10 @@ Prioritize information that reveals:
 
 ---
 
+## VERIFICATION SCREENS
+
+If the source content is a verification gate, CAPTCHA, age check, Cloudflare challenge, Reddit verification screen, or any other interstitial that blocks actual content, extract nothing. Return an empty result with no signals. These pages contain zero informational value.
+
 ## EXCLUDE
 
 Do not extract information solely because it is:

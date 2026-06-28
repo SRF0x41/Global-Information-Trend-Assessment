@@ -16,7 +16,7 @@ class TextExtractor:
     Extracts relevant text data from URLs using trafilatura and fallback methods.
     """
 
-    def __init__(self, timeout: int = 10, max_content_chars: int = 100000):
+    def __init__(self, timeout: int = 10, max_content_chars: int = 60000):
         self.session = requests.Session()
         self.timeout = timeout
         self.max_content_chars = max_content_chars
@@ -84,12 +84,48 @@ class TextExtractor:
             logger.warning("PDF extraction failed: %s", e)
             return "[ERROR could not parse PDF]"
 
+    _VERIFICATION_INDICATORS = [
+        'please verify you are a human',
+        'are you a robot',
+        'complete the challenge',
+        'verifying you are not a robot',
+        'cloudflare-turnstile',
+        'cf-challenge',
+        'under attack mode',
+        'checking your device',
+        'captcha',
+        'recaptcha',
+        'h-captcha',
+        'age verification',
+        'verify your age',
+        'you must be 13 or older',
+        'reddit.com/r/verify',
+        'one-time code',
+        'enter the code',
+        'security check',
+        'prove you are human',
+    ]
+
+    def _is_verification_page(self, html: str) -> bool:
+        """Heuristic: detect verification gates / interstitials."""
+        soup = BeautifulSoup(html, "html.parser")
+        # Lowercase title + body text for matching
+        title = (soup.title.get_text() if soup.title else "").lower()
+        body = soup.get_text(separator=" ", lowercase=True)
+        # Scan a trimmed window — full page text is overkill
+        check = (title + " " + body[:5000])
+        return any(indicator in check for indicator in self._VERIFICATION_INDICATORS)
+
     def extract_text(self, url: str) -> str:
         """
         Extract relevant text content from a given URL.
         Supports HTML (trafilatura + BeautifulSoup fallback) and PDF files.
-        Returns "[SKIPPED ...]" on invalid URLs or HTTP errors.
+        Returns "[SKIPPED ...]" on invalid URLs, HTTP errors, or skipped domains.
         """
+        # Skip Reddit entirely — verification gates produce no useful content
+        if "reddit.com" in url.lower():
+            return "[SKIPPED reddit — verification gate]"
+
         data = self._fetch_bytes(url)
         if data is None:
             return "[SKIPPED could not fetch page]"
@@ -99,6 +135,10 @@ class TextExtractor:
             return self._extract_pdf(data)
 
         html = data.decode("utf-8", errors="ignore")
+
+        # Skip verification gates / interstitials (Cloudflare, Reddit verify, CAPTCHA, etc.)
+        if self._is_verification_page(html):
+            return "[SKIPPED verification gate detected]"
 
         # Try high-quality extractor first (trafilatura)
         try:

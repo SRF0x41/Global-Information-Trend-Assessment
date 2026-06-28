@@ -339,6 +339,60 @@ def generate_refactor():
     return response
 
 
+def generate_synthesize():
+    """
+    Synthesize:
+    living document + SYNTHESIZE_PROMPT + SYSTEM_PROMPT + WRITE_TOOL_SCHEMA
+        - The LLM reads the Living Document and identifies clusters of signals
+          that have enough density to coalesce into cohesive prose.
+        - Makes multiple surgical `write` tool calls — one per section.
+        - Does NOT rewrite the entire document. Only touches sections ready for it.
+        - Freely deletes stale, redundant, or irrelevant information.
+    """
+    print("--- SYNTHESIZE: Coalescing Living Document ---")
+
+    SYNTHESIZE_PROMPT = Path("prompts/SYNTHESIZE_PROMPT.md")
+
+    synthesize_prompt = PromptBuilder()
+    synthesize_prompt.add_from_file(SYNTHESIZE_PROMPT)
+    synthesize_prompt.add_text("Below is the current Living Document.")
+    synthesize_prompt.add_from_file(LIVING_DOCUMENT)
+    synthesize_prompt.add_text(
+        "\nBelow is the tool schema that shows you how to call `write`."
+    )
+    synthesize_prompt.add_from_file(Path("tools/tool_schema/write_skill.md"))
+
+    response = llm_client.send_streaming(
+        system=SYSTEM_PROMPT.read_text(encoding="utf-8"),
+        user=synthesize_prompt.get_prompt(),
+    )
+
+    if not response:
+        print("Failed to synthesize — LLM returned empty response.")
+        return None
+
+    parser = ResponseParser()
+    print(response)
+    tool_calls = parser.extract_tool_calls(response)
+
+    from tools.document_write import DocumentWrite
+    writer = DocumentWrite(LIVING_DOCUMENT)
+
+    print("Applying surgical edits")
+    print(80 * "=")
+
+    for t in tool_calls:
+        print(json.dumps(t.get_raw_json(), indent=4))
+        args = t.get_tool_arguments()
+        try:
+            writer.apply(args)
+        except Exception as e:
+            print(f"Error applying write: {e}")
+
+    summarize(response)
+    return response
+
+
 
 def main():
     start_time = time.time()
@@ -357,8 +411,12 @@ def main():
             (Consider parsing the living document into parts and processing each part as a unit?
             But it may be usefull to have the entire document visible. Perhaps quantize the document for
             very manual work such as searching, )
+            
+            
     """
-    for i in range(2):
+    
+    
+    for i in range(4):
         planning_schema = planning()
         summarize(planning_schema)
 
@@ -384,6 +442,7 @@ def main():
         for s in search_queries:
             print(f"Query: {s}")
             search_store_analyze(s)
+            generate_synthesize()
 
 
         """
