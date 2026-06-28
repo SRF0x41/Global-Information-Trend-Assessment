@@ -24,7 +24,7 @@ Target a section by its header name. This is the most reliable mode — header n
 | Field       | Required | Description                                                    |
 |-------------|----------|----------------------------------------------------------------|
 | `section`   | yes      | Exact section header text (e.g. `EMERGING SIGNALS`, `BLIND SPOTS`) |
-| `operation` | yes      | `append` — add to end of section body. `replace` — swap entire section body. |
+| `operation` | yes      | `append` — add to end of section body. `replace` — swap entire section body. `create` — write content as the initial document (use when file is empty/missing). |
 | `content`   | yes      | Markdown text to insert or replace with.                        |
 
 **When to use**

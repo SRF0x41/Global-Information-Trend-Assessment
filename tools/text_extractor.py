@@ -1,9 +1,11 @@
 import logging
+import io
 import requests
 from typing import Dict, Any, Optional
 import time
 from bs4 import BeautifulSoup
 import trafilatura
+from pypdf import PdfReader
 
 logger = logging.getLogger(__name__)
 
@@ -51,15 +53,52 @@ class TextExtractor:
             logger.warning("Error fetching %s: %s", url, e)
             return None
 
+    def _fetch_bytes(self, url: str) -> Optional[bytes]:
+        """Fetch a URL and return raw bytes. Returns None on error."""
+        if not url or not url.startswith("http"):
+            return None
+
+        try:
+            resp = self.session.get(url, timeout=self.timeout)
+            if resp.status_code >= 400:
+                logger.warning("Skipping URL %s — HTTP %s", url, resp.status_code)
+                return None
+            resp.raise_for_status()
+            return resp.content
+        except Exception as e:
+            logger.warning("Error fetching %s: %s", url, e)
+            return None
+
+    def _extract_pdf(self, data: bytes) -> str:
+        """Extract text from PDF data."""
+        try:
+            reader = PdfReader(io.BytesIO(data))
+            texts = []
+            for page in reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    texts.append(page_text)
+            result = "\n\n".join(texts)
+            return result[:self.max_content_chars]
+        except Exception as e:
+            logger.warning("PDF extraction failed: %s", e)
+            return "[ERROR could not parse PDF]"
+
     def extract_text(self, url: str) -> str:
         """
         Extract relevant text content from a given URL.
-        Uses trafilatura for high-quality extraction with fallback to BeautifulSoup.
+        Supports HTML (trafilatura + BeautifulSoup fallback) and PDF files.
         Returns "[SKIPPED ...]" on invalid URLs or HTTP errors.
         """
-        html = self._fetch_url(url)
-        if html is None:
+        data = self._fetch_bytes(url)
+        if data is None:
             return "[SKIPPED could not fetch page]"
+
+        # Detect PDF by file signature (%PDF header bytes)
+        if data.startswith(b"%PDF"):
+            return self._extract_pdf(data)
+
+        html = data.decode("utf-8", errors="ignore")
 
         # Try high-quality extractor first (trafilatura)
         try:

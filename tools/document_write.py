@@ -35,6 +35,8 @@ class DocumentWrite:
                 operation=args.get("operation", "append"),
                 content=args["content"],
             )
+        if args.get("operation") == "create":
+            return self.create(args["content"])
         # Legacy: target / value
         target = args.get("target")
         value = args.get("value")
@@ -43,6 +45,13 @@ class DocumentWrite:
         if target is not None:
             return self.update(target=target, value=value or "")
         raise ValueError("apply() needs either 'section' or 'value' in args")
+
+    # -- Create --------------------------------------------------------- #
+
+    def create(self, content: str):
+        """Write content as the initial document body."""
+        with open(self._source_file, "w", encoding="utf-8") as f:
+            f.write(content.strip() + "\n")
 
     # -- Section-based updates ------------------------------------------ #
 
